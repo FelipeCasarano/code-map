@@ -1,6 +1,6 @@
 ---
 name: updating-code-map
-description: Refresh the Code Map index after editing files, and add short @cm anchors so future queries route faster. Trigger after writing or moving source files, or when adding a new public symbol.
+description: Keep the Code Map index fresh and add short @cm anchors so future queries route faster. Trigger after writing or moving source files, adding a new public symbol, or renaming code. Note - the plugin already auto-syncs after every Edit/Write via a PostToolUse hook, so manual syncs are only needed when editing outside the agent or when suspecting index corruption.
 ---
 
 # Updating the Code Map
@@ -9,7 +9,8 @@ Two responsibilities: keep the index fresh, and drop short anchors so the next q
 
 ## Sync
 
-- Run `cm sync` after a batch of edits. The sync is incremental (uses mtime + size); only changed files are re-parsed.
+- **The plugin auto-syncs.** A `PostToolUse` hook runs `cm sync --silent` after every Edit / Write / MultiEdit / NotebookEdit. You do not need to call `cm_sync` manually after an in-agent edit.
+- Call `cm_sync` manually only when: (a) files changed outside the agent (git pull, external editor), (b) you suspect index corruption, or (c) you rely on impact results right after a bulk non-tool edit.
 - Pass `--force` only when you suspect index corruption.
 - After a rename or large refactor, `cm sync --force` is safe and cheap.
 

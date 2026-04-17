@@ -107,6 +107,13 @@ function main(argv = process.argv.slice(2)) {
         process.exitCode = 1;
     }
   } catch (err) {
+    // In silent/hook mode, never block the agent session on a sync failure.
+    // The next manual cm call surfaces the real error.
+    if (flags.silent || process.env.CM_SILENT === "1") {
+      if (process.env.CM_DEBUG) process.stderr.write(`cm silent error: ${err.message}\n`);
+      process.exitCode = 0;
+      return;
+    }
     process.stderr.write(`Error: ${err.message}\n`);
     if (process.env.CM_DEBUG) process.stderr.write(err.stack + "\n");
     process.exitCode = 1;
