@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "code-map": {
+      "command": "node",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/src/mcp/server.js"],
+      "env": {
+        "CM_SESSION": "mcp"
+      }
+    }
+  }
+}

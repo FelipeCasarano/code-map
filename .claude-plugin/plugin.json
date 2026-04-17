@@ -1,0 +1,19 @@
+{
+  "name": "code-map",
+  "version": "0.1.0",
+  "description": "Code Map + Context Routing - fast file/symbol/route resolution, weighted impact graph, and per-session token-savings ledger.",
+  "author": {
+    "name": "Felipe Casarano",
+    "url": "https://github.com/FelipeCasarano"
+  },
+  "homepage": "https://github.com/FelipeCasarano/code-map",
+  "repository": "https://github.com/FelipeCasarano/code-map",
+  "license": "MIT",
+  "keywords": [
+    "context-routing",
+    "code-map",
+    "impact-graph",
+    "token-savings",
+    "retrieval"
+  ]
+}

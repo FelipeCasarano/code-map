@@ -26,72 +26,35 @@ On the self-benchmark (40 files, 17 tasks) Code Map delivers **98.9% token savin
 
 **One-time setup per project.** After it, your agent automatically prefers Code Map tools for every lookup and edit - you don't have to mention the plugin in prompts, you don't have to re-sync between sessions, and you don't have to wire anything per turn.
 
-### 1. Drop Code Map into your project
+### Claude Code (recommended)
 
-From the root of the repo you want to index:
+Code Map ships as a first-class Claude Code plugin. Inside Claude Code:
+
+```text
+/plugin marketplace add FelipeCasarano/code-map
+/plugin install code-map@code-map
+```
+
+That's it. Claude Code reads `.claude-plugin/plugin.json`, registers the plugin, and on install:
+
+- **Skills** auto-load from `skills/` - `using-code-map`, `updating-code-map`, `measuring-context-savings`.
+- **Slash commands** appear under `/cm-*` - `/cm-sync`, `/cm-resolve`, `/cm-impact`, `/cm-stats`, `/cm-explain`.
+- **SessionStart hook** runs `cm sync` at the start of every session, so the index is always fresh before the agent's first turn (see `hooks/hooks.json`).
+- **MCP server** is mounted from `.mcp.json`, exposing `cm_resolve`, `cm_search`, `cm_neighbors`, `cm_impact`, `cm_explain`, `cm_sync`, `cm_stats` as tools the agent can call directly.
+
+Use `/plugin` in Claude Code to list, disable, or update installed plugins. To upgrade:
+
+```text
+/plugin marketplace update code-map
+/plugin install code-map@code-map
+```
+
+---
+
+### Codex / Codex-CLI
 
 ```bash
 git clone https://github.com/FelipeCasarano/code-map.git .code-map-plugin
-node .code-map-plugin/src/cli/index.js sync
-```
-
-That builds the index under `.code-map/` in your project. Add `.code-map/` to your `.gitignore` (Code Map's own `.gitignore` already handles this when you adopt the plugin's template).
-
-> **Optional - put `cm` on your PATH:**
-> ```bash
-> npm install --no-save ./.code-map-plugin
-> # now `cm resolve ...`, `cm impact ...` work without the `node …` prefix
-> ```
-
-> **Optional - install through npm instead of cloning:**
-> ```bash
-> npm install --save-dev github:FelipeCasarano/code-map
-> npx cm sync
-> ```
-
-### 2. Wire it into your agent
-
-Pick the platform you use. Each subsection is a one-time step; you never repeat it.
-
----
-
-#### Claude Code
-
-Code Map ships a ready-to-use plugin manifest at `configs/claude-code.json` that declares the tools, skills, hooks, and permissions in one file.
-
-**Option A - project-local plugin directory (recommended):**
-
-```bash
-mkdir -p .claude/plugins/code-map
-cp .code-map-plugin/configs/claude-code.json .claude/plugins/code-map/plugin.json
-```
-
-**Option B - reference the plugin from your settings:**
-
-Add this to `~/.claude/settings.json` (user-scope) or `.claude/settings.json` (project-scope):
-
-```json
-{
-  "plugins": {
-    "code-map": {
-      "path": "./.code-map-plugin",
-      "config": "./.code-map-plugin/configs/claude-code.json"
-    }
-  }
-}
-```
-
-Either option gives you, in one step:
-
-- **Tools** - `cm_resolve`, `cm_search`, `cm_neighbors`, `cm_impact`, `cm_explain`, `cm_sync`, `cm_stats` - registered and pre-allowlisted (`permissions.allow` covers them, so no approval prompts).
-- **Skills** - `using-code-map`, `updating-code-map`, `measuring-context-savings` - auto-loaded from `skills/`.
-- **SessionStart hook** - `cm sync` runs automatically at the start of every session, so the index is always fresh before the agent's first turn.
-
----
-
-#### Codex / Codex-CLI
-
-```bash
 codex plugin add ./.code-map-plugin --config configs/codex.json
 ```
 
@@ -99,16 +62,16 @@ codex plugin add ./.code-map-plugin --config configs/codex.json
 
 ---
 
-#### Any MCP-compatible host
+### Any MCP-compatible host
 
-Code Map exposes itself as a stdio MCP server. Add `configs/mcp.json` to your MCP host configuration, or inline its contents:
+Code Map exposes itself as a stdio MCP server. Point your MCP host at the bundled `.mcp.json` (it uses `${CLAUDE_PLUGIN_ROOT}` when loaded through Claude Code), or inline the equivalent:
 
 ```json
 {
   "mcpServers": {
     "code-map": {
       "command": "node",
-      "args": [".code-map-plugin/src/mcp/server.js"],
+      "args": ["./.code-map-plugin/src/mcp/server.js"],
       "env": { "CM_SESSION": "mcp" }
     }
   }
@@ -116,6 +79,25 @@ Code Map exposes itself as a stdio MCP server. Add `configs/mcp.json` to your MC
 ```
 
 The MCP server implements `initialize`, `tools/list`, and `tools/call`, so any compliant host will see the Code Map tools immediately after a restart.
+
+---
+
+### Manual / development install
+
+If you are hacking on Code Map itself or want the CLI without the plugin surface:
+
+```bash
+git clone https://github.com/FelipeCasarano/code-map.git .code-map-plugin
+node .code-map-plugin/src/cli/index.js sync
+```
+
+That builds the index under `.code-map/` in your project. Add `.code-map/` to your `.gitignore` (Code Map's own `.gitignore` already handles this).
+
+> **Optional - put `cm` on your PATH:**
+> ```bash
+> npm install --no-save ./.code-map-plugin
+> # now `cm resolve ...`, `cm impact ...` work without the `node …` prefix
+> ```
 
 ---
 
@@ -145,7 +127,7 @@ Then confirm the agent side. Start a fresh session with your agent and ask:
 
 > "Where is `<some-symbol>` defined?"
 
-If Code Map is wired correctly, the agent will call `cm_resolve` directly instead of grepping the repo. The answer comes back in milliseconds and the session ledger (`cm stats`) will show a new event.
+If Code Map is wired correctly, the agent will call `cm_resolve` directly instead of grepping the repo. The answer comes back in milliseconds and the session ledger (`cm stats`, or `/cm-stats` inside Claude Code) will show a new event.
 
 Still want deeper assurance?
 
