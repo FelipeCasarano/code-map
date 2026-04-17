@@ -1,10 +1,12 @@
 {
   "name": "code-map",
   "version": "0.1.0",
-  "description": "Code Map - Context Routing plugin for coding agents. Resolves files/symbols/routes fast, builds an impact graph, and measures token savings.",
+  "description": "Code Map - Context Routing plugin for coding agents (Claude Code, Codex, Antigravity, any MCP host). Fast file/symbol/route resolver, weighted impact graph, and per-session token-savings ledger.",
   "bin": {
     "cm": "src/cli/index.js",
-    "code-map": "src/cli/index.js"
+    "code-map": "src/cli/index.js",
+    "code-map-mcp": "src/mcp/server.js",
+    "cm-mcp": "src/mcp/server.js"
   },
   "main": "src/core/index.js",
   "type": "commonjs",
@@ -16,6 +18,7 @@
     "impact": "node src/cli/index.js impact",
     "stats": "node src/cli/index.js stats",
     "explain": "node src/cli/index.js explain",
+    "mcp": "node src/mcp/server.js",
     "benchmark": "node scripts/benchmark.js",
     "benchmark:self": "node scripts/benchmark-self.js",
     "test": "node tests/run.js"
@@ -25,7 +28,11 @@
   },
   "keywords": [
     "claude-code",
+    "claude-code-plugin",
     "codex",
+    "antigravity",
+    "mcp",
+    "mcp-server",
     "agent",
     "plugin",
     "code-map",
@@ -39,12 +46,18 @@
     "type": "git",
     "url": "https://github.com/FelipeCasarano/code-map.git"
   },
+  "homepage": "https://github.com/FelipeCasarano/code-map",
   "files": [
     "src",
     "skills",
+    "commands",
+    "hooks",
     "configs",
     "scripts",
     "docs",
-    "README.md"
+    ".claude-plugin",
+    ".mcp.json",
+    "README.md",
+    "LICENSE"
   ]
 }

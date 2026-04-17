@@ -1,0 +1,10 @@
+{
+  "$comment": "Google Antigravity reads MCP servers from its settings file; this is the snippet to paste under mcpServers. After the server is registered, Antigravity lists the cm_* tools automatically.",
+  "mcpServers": {
+    "code-map": {
+      "command": "npx",
+      "args": ["-y", "code-map", "code-map-mcp"],
+      "env": { "CM_SESSION": "antigravity" }
+    }
+  }
+}

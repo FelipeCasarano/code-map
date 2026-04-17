@@ -9,7 +9,7 @@ function parseArgs(argv) {
   const args = { _: [], flags: {} };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
-    if (a === "--json" || a === "--quiet") args.flags[a.replace(/^--/, "")] = true;
+    if (a === "--json" || a === "--quiet" || a === "--silent") args.flags[a.replace(/^--/, "")] = true;
     else if (a.startsWith("--")) {
       const eq = a.indexOf("=");
       if (eq >= 0) args.flags[a.slice(2, eq)] = a.slice(eq + 1);
@@ -24,6 +24,7 @@ function parseArgs(argv) {
 }
 
 function emit(result, flags) {
+  if (flags.silent || process.env.CM_SILENT === "1") return;
   if (flags.json) {
     process.stdout.write(JSON.stringify(result, null, 2) + "\n");
     return;

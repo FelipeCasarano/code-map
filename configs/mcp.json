@@ -1,8 +1,14 @@
 {
+  "$comment": "Generic MCP-host config. Works with any host that speaks Model Context Protocol over stdio: Claude Desktop, Cursor, Continue, Cline, Zed, Google Antigravity, and others. Pick ONE of the entries below (npx is the simplest, local-path is best when you already cloned the repo).",
   "mcpServers": {
     "code-map": {
+      "command": "npx",
+      "args": ["-y", "code-map", "code-map-mcp"],
+      "env": { "CM_SESSION": "mcp" }
+    },
+    "code-map-local": {
       "command": "node",
-      "args": ["src/mcp/server.js"],
+      "args": ["./.code-map-plugin/src/mcp/server.js"],
       "env": { "CM_SESSION": "mcp" }
     }
   }

@@ -62,23 +62,25 @@ codex plugin add ./.code-map-plugin --config configs/codex.json
 
 ---
 
-### Any MCP-compatible host
+### Any MCP-compatible host (Cursor, Continue, Cline, Zed, Antigravity, Claude Desktop, …)
 
-Code Map exposes itself as a stdio MCP server. Point your MCP host at the bundled `.mcp.json` (it uses `${CLAUDE_PLUGIN_ROOT}` when loaded through Claude Code), or inline the equivalent:
+Code Map ships a `code-map-mcp` binary that speaks the Model Context Protocol over stdio. No extra install step — point any MCP host at it via `npx`:
 
 ```json
 {
   "mcpServers": {
     "code-map": {
-      "command": "node",
-      "args": ["./.code-map-plugin/src/mcp/server.js"],
+      "command": "npx",
+      "args": ["-y", "code-map", "code-map-mcp"],
       "env": { "CM_SESSION": "mcp" }
     }
   }
 }
 ```
 
-The MCP server implements `initialize`, `tools/list`, and `tools/call`, so any compliant host will see the Code Map tools immediately after a restart.
+Snippets tuned per host live under `configs/` (`configs/mcp.json` for the generic form, `configs/antigravity.json` for Google Antigravity, `configs/codex.json` for Codex-style harnesses).
+
+The MCP server implements `initialize`, `notifications/initialized`, `tools/list`, `tools/call`, `ping`, and `shutdown`. Every `cm_*` tool returns a proper JSON-Schema input contract, so compliant hosts auto-discover the tool surface on connection.
 
 ---
 
