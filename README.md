@@ -24,30 +24,47 @@ On the self-benchmark (40 files, 17 tasks) Code Map delivers **98.9% token savin
 
 ## Install
 
-**One-time setup per project.** After it, your agent automatically prefers Code Map tools for every lookup and edit - you don't have to mention the plugin in prompts, you don't have to re-sync between sessions, and you don't have to wire anything per turn.
+Pick your host. Each guide is **two commands or one JSON snippet**, copy-pasteable, and leaves you with a working plugin — skills, commands, hooks, and MCP tools all wired automatically.
 
-### Claude Code (recommended)
+> Requirements: Node 18+ on your PATH. Nothing else — Code Map has zero runtime dependencies.
 
-Code Map ships as a first-class Claude Code plugin. Inside Claude Code:
+### Claude Code
+
+Run from inside a Claude Code session (anywhere, any project):
 
 ```text
 /plugin marketplace add FelipeCasarano/code-map
 /plugin install code-map@code-map
 ```
 
-That's it. Claude Code reads `.claude-plugin/plugin.json`, registers the plugin, and on install:
+Claude Code clones the repo, reads `.claude-plugin/plugin.json`, and activates:
 
-- **Skills** auto-load from `skills/` - `using-code-map`, `updating-code-map`, `measuring-context-savings`.
-- **Slash commands** appear under `/cm-*` - `/cm-sync`, `/cm-resolve`, `/cm-impact`, `/cm-stats`, `/cm-explain`.
-- **SessionStart hook** runs `cm sync` at the start of every session, so the index is always fresh before the agent's first turn (see `hooks/hooks.json`).
-- **MCP server** is mounted from `.mcp.json`, exposing `cm_resolve`, `cm_search`, `cm_neighbors`, `cm_impact`, `cm_explain`, `cm_sync`, `cm_stats` as tools the agent can call directly.
+- **3 skills** (`using-code-map`, `updating-code-map`, `measuring-context-savings`) that teach the agent to prefer `cm_*` over grep.
+- **5 slash commands**: `/cm-sync`, `/cm-resolve`, `/cm-impact`, `/cm-stats`, `/cm-explain`.
+- **SessionStart hook** — `cm sync` runs silently at the top of every session.
+- **MCP server** — the seven `cm_*` tools appear natively in the tool picker.
 
-Use `/plugin` in Claude Code to list, disable, or update installed plugins. To upgrade:
+To confirm: type `/plugin` inside Claude Code — `code-map` should appear as enabled. Upgrade with `/plugin marketplace update code-map && /plugin install code-map@code-map`.
 
-```text
-/plugin marketplace update code-map
-/plugin install code-map@code-map
+---
+
+### Claude Desktop
+
+Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) or `%APPDATA%\Claude\claude_desktop_config.json` (Windows) and add:
+
+```json
+{
+  "mcpServers": {
+    "code-map": {
+      "command": "npx",
+      "args": ["-y", "code-map", "code-map-mcp"],
+      "env": { "CM_SESSION": "claude-desktop" }
+    }
+  }
+}
 ```
+
+Restart Claude Desktop. The seven `cm_*` tools appear under the 🔌 MCP icon.
 
 ---
 
@@ -62,9 +79,35 @@ codex plugin add ./.code-map-plugin --config configs/codex.json
 
 ---
 
-### Any MCP-compatible host (Cursor, Continue, Cline, Zed, Antigravity, Claude Desktop, …)
+### Google Antigravity
 
-Code Map ships a `code-map-mcp` binary that speaks the Model Context Protocol over stdio. No extra install step — point any MCP host at it via `npx`:
+Open Antigravity → Settings → MCP Servers → **Add server** → paste:
+
+```json
+{
+  "mcpServers": {
+    "code-map": {
+      "command": "npx",
+      "args": ["-y", "code-map", "code-map-mcp"],
+      "env": { "CM_SESSION": "antigravity" }
+    }
+  }
+}
+```
+
+(A ready-to-copy file is at `configs/antigravity.json`.) Antigravity auto-discovers the tool surface after restart.
+
+---
+
+### Cursor
+
+Edit `~/.cursor/mcp.json` (user-scope) or `.cursor/mcp.json` (project-scope) and add the same snippet as Claude Desktop above. Cursor reloads MCP servers on save.
+
+---
+
+### Continue / Cline / Zed / any other MCP host
+
+Every MCP-compatible host accepts the standard `mcpServers` object. Paste this into your host's MCP config — done:
 
 ```json
 {
@@ -78,58 +121,49 @@ Code Map ships a `code-map-mcp` binary that speaks the Model Context Protocol ov
 }
 ```
 
-Snippets tuned per host live under `configs/` (`configs/mcp.json` for the generic form, `configs/antigravity.json` for Google Antigravity, `configs/codex.json` for Codex-style harnesses).
-
-The MCP server implements `initialize`, `notifications/initialized`, `tools/list`, `tools/call`, `ping`, and `shutdown`. Every `cm_*` tool returns a proper JSON-Schema input contract, so compliant hosts auto-discover the tool surface on connection.
+The server speaks the full MCP handshake (`initialize`, `notifications/initialized`, `tools/list`, `tools/call`, `ping`, `shutdown`) and publishes JSON-Schema `inputSchema` for every tool, so the host picks them up automatically.
 
 ---
 
 ### Manual / development install
 
-If you are hacking on Code Map itself or want the CLI without the plugin surface:
+If you're hacking on Code Map itself or want the CLI without any agent:
 
 ```bash
 git clone https://github.com/FelipeCasarano/code-map.git .code-map-plugin
 node .code-map-plugin/src/cli/index.js sync
 ```
 
-That builds the index under `.code-map/` in your project. Add `.code-map/` to your `.gitignore` (Code Map's own `.gitignore` already handles this).
+That builds the index under `.code-map/` in your project. The repo's `.gitignore` already excludes generated artifacts. Put `cm` on your PATH with:
 
-> **Optional - put `cm` on your PATH:**
-> ```bash
-> npm install --no-save ./.code-map-plugin
-> # now `cm resolve ...`, `cm impact ...` work without the `node …` prefix
-> ```
+```bash
+npm install --no-save ./.code-map-plugin
+# now `cm resolve ...`, `cm impact ...` work without the node prefix
+```
 
 ---
 
 ## Verify
 
-Run these once after installation to confirm everything is wired:
+**Inside Claude Code** — run the slash commands:
 
-```bash
-# 1. Index built?
-node .code-map-plugin/src/cli/index.js sync
-#    → {"fileCount": N, "symbolCount": …, "elapsedMs": …}
-
-# 2. Resolver reachable?
-node .code-map-plugin/src/cli/index.js resolve <some-symbol-in-your-repo>
-#    → {"ok": true, "hits": [...]}
-
-# 3. Impact graph reachable?
-node .code-map-plugin/src/cli/index.js impact <some-file-in-your-repo>
-#    → {"ok": true, "files": [...]}
-
-# 4. Session ledger working?
-node .code-map-plugin/src/cli/index.js stats
-#    → {"summary": {"events": ≥3, "saved_percent": …}}
+```text
+/cm-sync        → { "fileCount": N, "symbolCount": …, "elapsedMs": … }
+/cm-resolve <some-symbol-in-your-repo>   → { "ok": true, "hits": [ … ] }
+/cm-impact   <some-file-in-your-repo>    → { "ok": true, "files": [ … ] }
+/cm-stats                                 → { "events": ≥3, "saved_percent": … }
 ```
 
-Then confirm the agent side. Start a fresh session with your agent and ask:
+**Any MCP host** — ask the agent: *"Where is `<some-symbol>` defined?"* If the plugin is wired correctly the agent calls `cm_resolve` directly (instead of grepping), returns the answer in milliseconds, and the ledger records a new event you can inspect with `cm stats`.
 
-> "Where is `<some-symbol>` defined?"
+**From the terminal** (manual install or sanity check):
 
-If Code Map is wired correctly, the agent will call `cm_resolve` directly instead of grepping the repo. The answer comes back in milliseconds and the session ledger (`cm stats`, or `/cm-stats` inside Claude Code) will show a new event.
+```bash
+npx -y code-map cm sync
+npx -y code-map cm resolve <some-symbol>
+npx -y code-map cm impact <some-file>
+npx -y code-map cm stats
+```
 
 Still want deeper assurance?
 
@@ -193,7 +227,7 @@ Three short skills tell the agent when and how to reach for the tools:
 - [`skills/updating-code-map`](skills/updating-code-map/SKILL.md) - when to re-sync, when to add an `@cm` anchor
 - [`skills/measuring-context-savings`](skills/measuring-context-savings/SKILL.md) - reading and reporting savings
 
-Skills are auto-loaded by the harness when the plugin is wired through `configs/claude-code.json` (or its equivalent for other platforms). You don't register them by hand.
+Skills are auto-loaded by the Claude Code harness from the plugin's `skills/` directory (declared in `.claude-plugin/plugin.json`). You don't register them by hand.
 
 ---
 
