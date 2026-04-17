@@ -57,7 +57,7 @@ Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) o
   "mcpServers": {
     "code-map": {
       "command": "npx",
-      "args": ["-y", "code-map", "code-map-mcp"],
+      "args": ["-y", "code-map", "mcp"],
       "env": { "CM_SESSION": "claude-desktop" }
     }
   }
@@ -88,7 +88,7 @@ Open Antigravity → Settings → MCP Servers → **Add server** → paste:
   "mcpServers": {
     "code-map": {
       "command": "npx",
-      "args": ["-y", "code-map", "code-map-mcp"],
+      "args": ["-y", "code-map", "mcp"],
       "env": { "CM_SESSION": "antigravity" }
     }
   }
@@ -114,7 +114,7 @@ Every MCP-compatible host accepts the standard `mcpServers` object. Paste this i
   "mcpServers": {
     "code-map": {
       "command": "npx",
-      "args": ["-y", "code-map", "code-map-mcp"],
+      "args": ["-y", "code-map", "mcp"],
       "env": { "CM_SESSION": "mcp" }
     }
   }
@@ -159,10 +159,10 @@ npm install --no-save ./.code-map-plugin
 **From the terminal** (manual install or sanity check):
 
 ```bash
-npx -y code-map cm sync
-npx -y code-map cm resolve <some-symbol>
-npx -y code-map cm impact <some-file>
-npx -y code-map cm stats
+npx -y code-map sync
+npx -y code-map resolve <some-symbol>
+npx -y code-map impact <some-file>
+npx -y code-map stats
 ```
 
 Still want deeper assurance?

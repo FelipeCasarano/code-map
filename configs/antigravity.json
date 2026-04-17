@@ -3,7 +3,7 @@
   "mcpServers": {
     "code-map": {
       "command": "npx",
-      "args": ["-y", "code-map", "code-map-mcp"],
+      "args": ["-y", "code-map", "mcp"],
       "env": { "CM_SESSION": "antigravity" }
     }
   }

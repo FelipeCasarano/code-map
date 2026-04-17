@@ -49,6 +49,7 @@ function help() {
     "  cm impact <target> [--depth N] [--limit N]      Weighted impact set",
     "  cm stats [--session id]                         Token-savings summary for the session",
     "  cm explain <query>                              Trace which layer answered and why",
+    "  cm mcp                                          Launch the stdio MCP server",
     "  cm help                                         Show this help",
     "",
     "Common flags: --json (machine output), --root <path>, --session <id>",
@@ -97,6 +98,15 @@ function main(argv = process.argv.slice(2)) {
       case "explain": {
         const q = args._.slice(1).join(" ");
         return emit(cm.cm_explain(q, opts), flags);
+      }
+      case "mcp":
+      case "mcp-server":
+      case "code-map-mcp":
+      case "cm-mcp": {
+        // Boot the stdio MCP server in-process. Survives any npx resolution
+        // quirk (npx -y code-map mcp, npx -y code-map code-map-mcp, etc).
+        require("../mcp/server").createServer();
+        return;
       }
       case "help":
       case "--help":
