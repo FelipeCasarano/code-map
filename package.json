@@ -1,0 +1,50 @@
+{
+  "name": "code-map",
+  "version": "0.1.0",
+  "description": "Code Map - Context Routing plugin for coding agents. Resolves files/symbols/routes fast, builds an impact graph, and measures token savings.",
+  "bin": {
+    "cm": "src/cli/index.js",
+    "code-map": "src/cli/index.js"
+  },
+  "main": "src/core/index.js",
+  "type": "commonjs",
+  "scripts": {
+    "sync": "node src/cli/index.js sync",
+    "resolve": "node src/cli/index.js resolve",
+    "search": "node src/cli/index.js search",
+    "neighbors": "node src/cli/index.js neighbors",
+    "impact": "node src/cli/index.js impact",
+    "stats": "node src/cli/index.js stats",
+    "explain": "node src/cli/index.js explain",
+    "benchmark": "node scripts/benchmark.js",
+    "benchmark:self": "node scripts/benchmark-self.js",
+    "test": "node tests/run.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "claude-code",
+    "codex",
+    "agent",
+    "plugin",
+    "code-map",
+    "context-routing",
+    "token-savings",
+    "impact-graph",
+    "retrieval"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/FelipeCasarano/code-map.git"
+  },
+  "files": [
+    "src",
+    "skills",
+    "configs",
+    "scripts",
+    "docs",
+    "README.md"
+  ]
+}

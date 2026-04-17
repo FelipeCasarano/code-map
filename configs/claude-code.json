@@ -1,0 +1,34 @@
+{
+  "$schema": "https://anthropic.com/schemas/claude-code/plugin/v1.json",
+  "name": "code-map",
+  "version": "0.1.0",
+  "description": "Code Map + Context Routing - resolve, search, neighbors, impact, stats.",
+  "skills": [
+    "skills/using-code-map",
+    "skills/updating-code-map",
+    "skills/measuring-context-savings"
+  ],
+  "tools": [
+    { "name": "cm_resolve",   "command": "node src/cli/index.js resolve --json"   },
+    { "name": "cm_search",    "command": "node src/cli/index.js search --json"    },
+    { "name": "cm_neighbors", "command": "node src/cli/index.js neighbors --json" },
+    { "name": "cm_impact",    "command": "node src/cli/index.js impact --json"    },
+    { "name": "cm_explain",   "command": "node src/cli/index.js explain --json"   },
+    { "name": "cm_sync",      "command": "node src/cli/index.js sync --json"      },
+    { "name": "cm_stats",     "command": "node src/cli/index.js stats --json"     }
+  ],
+  "hooks": {
+    "SessionStart": "node src/cli/index.js sync"
+  },
+  "permissions": {
+    "allow": [
+      "Bash(node src/cli/index.js sync*)",
+      "Bash(node src/cli/index.js resolve*)",
+      "Bash(node src/cli/index.js search*)",
+      "Bash(node src/cli/index.js neighbors*)",
+      "Bash(node src/cli/index.js impact*)",
+      "Bash(node src/cli/index.js explain*)",
+      "Bash(node src/cli/index.js stats*)"
+    ]
+  }
+}

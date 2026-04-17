@@ -1,0 +1,25 @@
+node_modules/
+.DS_Store
+*.log
+.env
+.env.*
+
+# generated tmp dirs from tests/benchmarks
+.tmp-test-root/
+.tmp-bench-root/
+
+# legacy storage dir name (kept here so older clones do not commit it)
+.ai-context/
+
+# local index cache - never commit the generated index of a host project
+.code-map/index.json
+.code-map/symbols.jsonl
+.code-map/summaries.jsonl
+.code-map/aliases.jsonl
+.code-map/graph.json
+.code-map/sessions/
+.code-map/benchmark.json
+.code-map/version.json
+
+# keep the directory around via a template
+!.code-map/template.json

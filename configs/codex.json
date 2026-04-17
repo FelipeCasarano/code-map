@@ -1,0 +1,15 @@
+{
+  "name": "code-map",
+  "version": "0.1.0",
+  "description": "Code Map + Context Routing for Codex-style agents.",
+  "bootstrap": "node src/cli/index.js sync",
+  "tools": [
+    { "name": "cm_resolve",   "argv": ["node", "src/cli/index.js", "resolve",   "--json"] },
+    { "name": "cm_search",    "argv": ["node", "src/cli/index.js", "search",    "--json"] },
+    { "name": "cm_neighbors", "argv": ["node", "src/cli/index.js", "neighbors", "--json"] },
+    { "name": "cm_impact",    "argv": ["node", "src/cli/index.js", "impact",    "--json"] },
+    { "name": "cm_explain",   "argv": ["node", "src/cli/index.js", "explain",   "--json"] },
+    { "name": "cm_sync",      "argv": ["node", "src/cli/index.js", "sync",      "--json"] },
+    { "name": "cm_stats",     "argv": ["node", "src/cli/index.js", "stats",     "--json"] }
+  ]
+}
