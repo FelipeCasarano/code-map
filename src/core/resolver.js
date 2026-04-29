@@ -7,6 +7,13 @@ function basename(rel) {
   return rel.split("/").pop();
 }
 
+const TEST_PATH_RE = /(^|\/)(tests?|__tests__|spec)\/|\.(test|spec)\.[a-z]+$/i;
+const TEST_QUERY_RE = /\b(test|spec|fixture)\b/i;
+
+function isTestRel(rel) {
+  return TEST_PATH_RE.test(rel);
+}
+
 // @cm id=resolve role=entry involves=loadIndex,symbols,aliases affects=cm_resolve.cli,cm_search.fallback
 function resolve(query, opts = {}) {
   const t0 = Date.now();
@@ -17,6 +24,8 @@ function resolve(query, opts = {}) {
   if (!q) return { ok: false, reason: "empty-query", hits: [], elapsedMs: 0 };
 
   const ql = q.toLowerCase();
+  const hasDot = q.includes(".") && !q.startsWith(".") && !q.endsWith(".");
+  const queryHasTestIntent = TEST_QUERY_RE.test(q);
   const hits = [];
   const seen = new Set();
   const push = (h) => {
@@ -43,10 +52,27 @@ function resolve(query, opts = {}) {
     }
   }
 
-  // 3) symbol exact match via alias map
+  // 3) symbol exact match via alias map.
+  // A2: dotted queries match the qualifiedName key first; then fall back to last-segment.
+  // A3: penalize hits whose file is a test when the query has no test intent.
   if (aliases.has(ql)) {
     for (const hit of aliases.get(ql)) {
-      push({ kind: hit.kind || "symbol", rel: hit.rel, line: hit.line, score: 0.92, reason: "symbol-exact", name: q });
+      let score = 0.92;
+      if (!queryHasTestIntent && isTestRel(hit.rel)) score *= 0.7;
+      push({ kind: hit.kind || "symbol", rel: hit.rel, line: hit.line, score, reason: "symbol-exact", name: q });
+    }
+  }
+  // A2: if query is dotted (e.g., "app.handle") and exact match missed, try last segment.
+  if (hasDot && hits.length === 0) {
+    const lastSeg = ql.split(".").pop();
+    if (aliases.has(lastSeg)) {
+      for (const hit of aliases.get(lastSeg)) {
+        // Boost when hit's qualifiedName matches the original dotted query.
+        const exactQualified = hit.qualifiedName && hit.qualifiedName.toLowerCase() === ql;
+        let score = exactQualified ? 0.94 : 0.78;
+        if (!queryHasTestIntent && isTestRel(hit.rel)) score *= 0.7;
+        push({ kind: hit.kind || "symbol", rel: hit.rel, line: hit.line, score, reason: exactQualified ? "symbol-exact-qualified" : "symbol-last-segment", name: q });
+      }
     }
   }
 
@@ -73,30 +99,58 @@ function resolve(query, opts = {}) {
     }
   }
 
-  // 6) fuzzy basename: partial inclusion
-  if (hits.length === 0) {
+  // 6) fuzzy basename: partial inclusion.
+  // A4: skip when query is dotted (it's a symbol reference, not a path); also penalize tests.
+  if (hits.length === 0 && !hasDot) {
     for (const f of index.files) {
       const base = basename(f.rel).toLowerCase();
       if (base.includes(ql)) {
         const ratio = ql.length / base.length;
-        push({ kind: "file", rel: f.rel, line: 1, score: 0.55 + ratio * 0.2, reason: "fuzzy-basename", name: basename(f.rel) });
+        let score = 0.55 + ratio * 0.2;
+        if (!queryHasTestIntent && isTestRel(f.rel)) score *= 0.7;
+        push({ kind: "file", rel: f.rel, line: 1, score, reason: "fuzzy-basename", name: basename(f.rel) });
       }
     }
   }
 
   // 7) symbol contains
   if (hits.length === 0) {
+    const lookup = hasDot ? ql.split(".").pop() : ql;
     for (const s of symbols) {
-      if (s.name && s.name.toLowerCase().includes(ql)) {
-        push({ kind: s.kind || "symbol", rel: s.rel, line: s.line, score: 0.5, reason: "symbol-contains", name: s.name });
+      if (s.name && s.name.toLowerCase().includes(lookup)) {
+        let score = 0.5;
+        if (!queryHasTestIntent && isTestRel(s.rel)) score *= 0.7;
+        push({ kind: s.kind || "symbol", rel: s.rel, line: s.line, score, reason: "symbol-contains", name: s.name });
       }
     }
   }
 
   hits.sort((a, b) => b.score - a.score);
-  const limit = opts.limit || 8;
+  const slim = process.env.CM_PAYLOAD_SLIM === "1";
+  const limit = opts.limit || (slim ? 3 : 8);
   const out = hits.slice(0, limit);
 
+  // A6: low-confidence signal. Anything below this score is weak.
+  const topScore = out[0]?.score || 0;
+  const lowConfidenceLayers = new Set(["symbol-contains", "fuzzy-basename"]);
+  const lowConfidence = !out.length || topScore < 0.7 || lowConfidenceLayers.has(out[0]?.reason);
+
+  if (slim) {
+    const payload = {
+      ok: out.length > 0,
+      query: q,
+      hits: out.map((h) => ({ rel: h.rel, score: h.score })),
+      layer: out[0]?.reason || null,
+      elapsedMs: Date.now() - t0,
+    };
+    if (lowConfidence) {
+      payload.confidence = Math.min(0.5, topScore || 0.3);
+      payload.suggest_fallback = "rg";
+    } else {
+      payload.confidence = Math.min(1, topScore);
+    }
+    return payload;
+  }
   return {
     ok: out.length > 0,
     query: q,
@@ -104,6 +158,8 @@ function resolve(query, opts = {}) {
     layer: out[0]?.reason || null,
     elapsedMs: Date.now() - t0,
     candidatesConsidered: index.files.length + symbols.length,
+    confidence: lowConfidence ? Math.min(0.5, topScore || 0.3) : Math.min(1, topScore),
+    suggest_fallback: lowConfidence ? "rg" : undefined,
   };
 }
 

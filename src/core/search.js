@@ -68,6 +68,14 @@ function search(query, opts = {}) {
   }
   scored.sort((a, b) => b.score - a.score);
   const limit = opts.limit || 12;
+  if (process.env.CM_PAYLOAD_SLIM === "1") {
+    return {
+      ok: scored.length > 0,
+      query,
+      hits: scored.slice(0, limit).map((s) => ({ rel: s.rel, score: s.score })),
+      elapsedMs: Date.now() - t0,
+    };
+  }
   return {
     ok: scored.length > 0,
     query,
