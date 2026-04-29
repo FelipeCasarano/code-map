@@ -80,10 +80,18 @@ function syncIndex(opts = {}) {
     fileRecords.push(record);
 
     for (const s of parsed.symbols) {
-      symbols.push({ rel: f.rel, name: s.name, kind: s.kind, line: s.line });
+      symbols.push({ rel: f.rel, name: s.name, kind: s.kind, line: s.line, qualifiedName: s.qualifiedName });
       const key = s.name.toLowerCase();
       if (!aliases.has(key)) aliases.set(key, []);
-      aliases.get(key).push({ rel: f.rel, line: s.line, kind: s.kind });
+      aliases.get(key).push({ rel: f.rel, line: s.line, kind: s.kind, qualifiedName: s.qualifiedName });
+      // Also key by qualifiedName so dotted queries hit directly.
+      if (s.qualifiedName) {
+        const qk = s.qualifiedName.toLowerCase();
+        if (qk !== key) {
+          if (!aliases.has(qk)) aliases.set(qk, []);
+          aliases.get(qk).push({ rel: f.rel, line: s.line, kind: s.kind, qualifiedName: s.qualifiedName });
+        }
+      }
     }
     for (const r of parsed.routes) {
       symbols.push({ rel: f.rel, name: `${r.method} ${r.path}`, kind: "route", line: r.line });
@@ -115,6 +123,15 @@ function syncIndex(opts = {}) {
     files: fileRecords,
   };
 
+  // Repo fingerprint for stale detection: max mtime + count + size sum.
+  const fingerprint = {
+    fileCount: fileRecords.length,
+    maxMtimeMs: fileRecords.reduce((m, r) => Math.max(m, r.mtimeMs || 0), 0),
+    sizeSum: fileRecords.reduce((s, r) => s + (r.size || 0), 0),
+    builtAt: indexJSON.builtAt,
+  };
+  indexJSON.fingerprint = fingerprint;
+
   store.writeJSON("index", indexJSON);
   store.writeJSONL("symbols", symbols);
   store.writeJSONL("summaries", summaries);
@@ -123,7 +140,7 @@ function syncIndex(opts = {}) {
     Array.from(aliases.entries()).map(([alias, hits]) => ({ alias, hits }))
   );
   store.writeJSON("graph", graph.toJSON());
-  store.writeJSON("version", { schemaVersion: SCHEMA_VERSION, builtAt: indexJSON.builtAt, fileCount: fileRecords.length });
+  store.writeJSON("version", { schemaVersion: SCHEMA_VERSION, builtAt: indexJSON.builtAt, fileCount: fileRecords.length, fingerprint });
 
   const elapsedMs = Date.now() - t0;
   return {
@@ -138,6 +155,32 @@ function syncIndex(opts = {}) {
   };
 }
 
+// Quickly compute current repo fingerprint without parsing — used to detect stale index.
+function computeCurrentFingerprint(rootArg, opts = {}) {
+  const root = rootArg ? path.resolve(rootArg) : repoRoot();
+  const found = scanRepo(root, opts);
+  let maxMtime = 0;
+  let sizeSum = 0;
+  for (const f of found) {
+    if (f.mtimeMs > maxMtime) maxMtime = f.mtimeMs;
+    sizeSum += f.size || 0;
+  }
+  return { fileCount: found.length, maxMtimeMs: maxMtime, sizeSum };
+}
+
+function isIndexStale(rootArg, opts = {}) {
+  const root = rootArg ? path.resolve(rootArg) : repoRoot();
+  const store = new Store(root);
+  const idx = store.readJSON("index", null);
+  if (!idx || !idx.fingerprint) return { stale: true, reason: "no-fingerprint" };
+  const cur = computeCurrentFingerprint(root, opts);
+  const prev = idx.fingerprint;
+  if (cur.fileCount !== prev.fileCount) return { stale: true, reason: "file-count-changed", prev, cur };
+  if (cur.maxMtimeMs !== prev.maxMtimeMs) return { stale: true, reason: "mtime-changed", prev, cur };
+  if (cur.sizeSum !== prev.sizeSum) return { stale: true, reason: "size-changed", prev, cur };
+  return { stale: false, prev, cur };
+}
+
 function loadIndex(rootArg) {
   const root = rootArg ? path.resolve(rootArg) : repoRoot();
   const store = new Store(root);
@@ -150,4 +193,4 @@ function loadIndex(rootArg) {
   return { root, store, index, symbols, summaries, aliases, graph };
 }
 
-module.exports = { syncIndex, loadIndex, SCHEMA_VERSION, tokenizeForSearch };
+module.exports = { syncIndex, loadIndex, isIndexStale, computeCurrentFingerprint, SCHEMA_VERSION, tokenizeForSearch };

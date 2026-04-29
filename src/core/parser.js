@@ -35,6 +35,26 @@ function extractJSImports(text) {
   while ((m = re1.exec(text)) !== null) out.push(m[1]);
   while ((m = re2.exec(text)) !== null) out.push(m[1]);
   while ((m = re3.exec(text)) !== null) out.push(m[1]);
+
+  // Dynamic registry detection (gated). Pattern:
+  //   const jobs = { name: "./handlers/login.ts", ... };
+  //   await import(jobs[x]);
+  // When we see `import(IDENT[...])`, look back for an object literal assigned to IDENT
+  // and emit each string value as a candidate import target.
+  if (process.env.CM_PARSER_AST === "1" || process.env.CM_DYNAMIC_REGISTRY === "1") {
+    const dynRe = /\bimport\(\s*([A-Za-z_$][\w$]*)\s*\[/g;
+    while ((m = dynRe.exec(text)) !== null) {
+      const ident = m[1];
+      const objRe = new RegExp(`\\b(?:const|let|var)\\s+${ident}\\b[^=]*=\\s*\\{([\\s\\S]*?)\\}`);
+      const om = text.match(objRe);
+      if (om) {
+        const body = om[1];
+        const valRe = /["']([^"']+\.(?:js|jsx|mjs|cjs|ts|tsx|py))["']/g;
+        let vm;
+        while ((vm = valRe.exec(body)) !== null) out.push(vm[1]);
+      }
+    }
+  }
   return uniq(out);
 }
 
@@ -83,19 +103,46 @@ function extractImports(rel, text) {
 
 function extractJSSymbols(text, lines) {
   const symbols = [];
-  const patterns = [
+  // Single-name patterns (legacy; capture group 1 = name).
+  const singlePatterns = [
     { kind: "function", re: /^\s*(?:export\s+(?:default\s+)?|async\s+|export\s+async\s+)?function\s+([A-Za-z_$][\w$]*)/gm },
     { kind: "function", re: /^\s*(?:export\s+(?:const|let|var)\s+|const\s+|let\s+|var\s+)([A-Za-z_$][\w$]*)\s*=\s*(?:async\s+)?(?:function\b|\([^)]*\)\s*=>)/gm },
     { kind: "class", re: /^\s*(?:export\s+(?:default\s+)?)?class\s+([A-Za-z_$][\w$]*)/gm },
     { kind: "method", re: /^\s{2,}(?:async\s+|static\s+|public\s+|private\s+|protected\s+)*([A-Za-z_$][\w$]*)\s*\([^)]*\)\s*\{/gm },
+    // exports.NAME = function | exports.NAME = (...) =>
+    { kind: "function", re: /^\s*(?:module\.)?exports\.([A-Za-z_$][\w$]*)\s*=\s*(?:async\s+)?(?:function\b|\([^)]*\)\s*=>)/gm, qualifierFn: () => "exports" },
   ];
-  for (const { kind, re } of patterns) {
+  // Dotted patterns (capture 1 = qualifier, capture 2 = name) — emit both `name`
+  // and `qualifiedName` so dotted queries (`app.handle`, `User.prototype.find`) match.
+  const dottedPatterns = [
+    // IDENT.prototype.NAME = function
+    { kind: "method", re: /^\s*([A-Za-z_$][\w$]*)\.prototype\.([A-Za-z_$][\w$]*)\s*=\s*(?:async\s+)?(?:function\b|\([^)]*\)\s*=>)/gm, joinWith: ".prototype." },
+    // IDENT.NAME = function (must rule out exports.X — handled above)
+    { kind: "method", re: /^\s*([A-Za-z_$][\w$]*)\.([A-Za-z_$][\w$]*)\s*=\s*(?:async\s+)?(?:function\b|\([^)]*\)\s*=>)/gm, joinWith: ".", excludeQualifier: new Set(["exports", "module"]) },
+  ];
+  const reserved = new Set(["if", "for", "while", "switch", "return", "function", "constructor"]);
+
+  for (const { kind, re, qualifierFn } of singlePatterns) {
     let m;
     while ((m = re.exec(text)) !== null) {
       const name = m[1];
-      if (!name || ["if", "for", "while", "switch", "return", "function", "constructor"].includes(name)) continue;
+      if (!name || reserved.has(name)) continue;
       const line = text.slice(0, m.index).split("\n").length;
-      symbols.push({ kind, name, line });
+      const sym = { kind, name, line };
+      if (qualifierFn) sym.qualifiedName = `${qualifierFn()}.${name}`;
+      symbols.push(sym);
+    }
+  }
+  // Track positions matched by dotted patterns so we don't double-count with singlePattern method.
+  for (const { kind, re, joinWith, excludeQualifier } of dottedPatterns) {
+    let m;
+    while ((m = re.exec(text)) !== null) {
+      const qualifier = m[1];
+      const name = m[2];
+      if (!name || reserved.has(name)) continue;
+      if (excludeQualifier && excludeQualifier.has(qualifier)) continue;
+      const line = text.slice(0, m.index).split("\n").length;
+      symbols.push({ kind, name, line, qualifiedName: `${qualifier}${joinWith}${name}` });
     }
   }
   return symbols;
