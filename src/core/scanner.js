@@ -42,7 +42,26 @@ const TEXT_EXTENSIONS = new Set([
   ".html", ".css", ".scss", ".vue", ".svelte",
 ]);
 
+// Source-only extensions for the scan filter mode. Excludes JSON, lockfiles, markdown,
+// configs, etc. These dilute the index, inflate search, and waste tokens.
+const SOURCE_EXTENSIONS = new Set([
+  ".js", ".jsx", ".mjs", ".cjs", ".ts", ".tsx",
+  ".py", ".rb", ".go", ".rs", ".java", ".kt", ".kts",
+  ".cs", ".cpp", ".cc", ".c", ".h", ".hpp",
+  ".php", ".swift", ".scala",
+  ".vue", ".svelte",
+  ".sql", ".graphql", ".gql",
+]);
+
+const SCAN_DROP_BASENAMES = new Set([
+  "package-lock.json", "yarn.lock", "pnpm-lock.yaml", "bun.lockb",
+  "Cargo.lock", "Pipfile.lock", "poetry.lock", "go.sum",
+]);
+
 function isText(file) {
+  if (process.env.CM_SCAN_FILTER === "1") {
+    return SOURCE_EXTENSIONS.has(path.extname(file).toLowerCase()) && !SCAN_DROP_BASENAMES.has(path.basename(file));
+  }
   return TEXT_EXTENSIONS.has(path.extname(file).toLowerCase());
 }
 

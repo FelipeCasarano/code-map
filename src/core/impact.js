@@ -23,13 +23,30 @@ function impact(target, opts = {}) {
   if (!id) return { ok: false, reason: "node-not-found", target, impact: [], elapsedMs: Date.now() - t0 };
 
   const fileLimit = opts.limit || 30;
-  // Pull a wider raw set so cross-file results survive the file projection step.
-  const rawLimit = Math.max(fileLimit * 6, 60);
-  const set = ctx.graph.impact(id, {
-    depth: opts.depth || 2,
-    limit: rawLimit,
-    decay: opts.decay || 0.55,
-  });
+  const useTyped = process.env.CM_IMPACT_TYPED === "1" || opts.typed === true;
+  // A5: explicit mode. "direct" => depth=1, no anchor edges; high precision.
+  // "transitive" => depth>=2, full propagation rules; high recall.
+  // Default in slim mode is "direct"; otherwise "transitive" to keep legacy behavior.
+  const slim = process.env.CM_PAYLOAD_SLIM === "1";
+  const mode = opts.mode || (slim ? "direct" : "transitive");
+  let set;
+  if (useTyped && typeof ctx.graph.impactPrecise === "function") {
+    const isDirect = mode === "direct";
+    set = ctx.graph.impactPrecise(id, {
+      depth: isDirect ? 1 : (opts.depth || 2),
+      limit: Math.max(fileLimit * 2, 12),
+      decay: opts.decay || (isDirect ? 0.9 : 0.7),
+      includeAnchors: !isDirect,
+    });
+  } else {
+    // Pull a wider raw set so cross-file results survive the file projection step.
+    const rawLimit = Math.max(fileLimit * 6, 60);
+    set = ctx.graph.impact(id, {
+      depth: opts.depth || 2,
+      limit: rawLimit,
+      decay: opts.decay || 0.55,
+    });
+  }
 
   // Project graph nodes back to file paths for caller convenience.
   const files = [];
@@ -46,6 +63,17 @@ function impact(target, opts = {}) {
     }
   }
 
+  if (process.env.CM_PAYLOAD_SLIM === "1") {
+    // Tighter limit in slim mode: ground-truth impact sets are usually 1-3 files; over-returning
+    // wastes tokens and hurts precision without helping recall.
+    const slimLimit = Math.min(fileLimit, 6);
+    return {
+      ok: true,
+      target,
+      impact: files.slice(0, slimLimit).map((f) => ({ rel: f.rel, score: f.score })),
+      elapsedMs: Date.now() - t0,
+    };
+  }
   return {
     ok: true,
     target,

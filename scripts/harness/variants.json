@@ -1,0 +1,9 @@
+{
+  "default": { "flags": {} },
+  "v1-honest": { "flags": { "honest_accounting": "1", "stale_warn": "1" } },
+  "v2-ast": { "flags": { "honest_accounting": "1", "stale_warn": "1", "parser_ast": "1" } },
+  "v3-ranking": { "flags": { "honest_accounting": "1", "stale_warn": "1", "parser_ast": "1", "ranking_v2": "1" } },
+  "v4-impact-typed": { "flags": { "honest_accounting": "1", "stale_warn": "1", "parser_ast": "1", "ranking_v2": "1", "impact_typed": "1" } },
+  "v5-scan-filter": { "flags": { "honest_accounting": "1", "stale_warn": "1", "parser_ast": "1", "ranking_v2": "1", "impact_typed": "1", "scan_filter": "1" } },
+  "v6-payload-slim": { "flags": { "honest_accounting": "1", "stale_warn": "1", "parser_ast": "1", "ranking_v2": "1", "impact_typed": "1", "scan_filter": "1", "payload_slim": "1" } }
+}

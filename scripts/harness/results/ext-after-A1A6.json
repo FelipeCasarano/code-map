@@ -1,0 +1,831 @@
+{
+  "variant": "v6-payload-slim",
+  "flags": {
+    "honest_accounting": "1",
+    "stale_warn": "1",
+    "parser_ast": "1",
+    "ranking_v2": "1",
+    "impact_typed": "1",
+    "scan_filter": "1",
+    "payload_slim": "1"
+  },
+  "generatedAt": "2026-04-29T17:14:19.288Z",
+  "aggregate": {
+    "n_tasks": 16,
+    "n_locate": 10,
+    "n_impact": 6,
+    "code_map": {
+      "delivered_tokens_total": 715,
+      "saved_vs_raw_pct": 0.9997099645629429,
+      "top1_acc": 1,
+      "top3_acc": 1,
+      "impact_f1": 0.7685185185185186,
+      "impact_recall": 0.861111111111111,
+      "impact_precision": 0.7777777777777777
+    },
+    "baseline": {
+      "delivered_tokens_total": 113263,
+      "saved_vs_raw_pct": 0.95405554726239,
+      "top1_acc": 0.4,
+      "top3_acc": 0.8,
+      "impact_f1": 0.16556776556776556,
+      "impact_recall": 0.6666666666666666,
+      "impact_precision": 0.09722222222222221
+    },
+    "head_to_head": {
+      "delivered_tokens_ratio_cm_over_baseline": 0.006312741142297132,
+      "cm_saves_vs_baseline_pct": 0.9936872588577028,
+      "cm_quality_locate_top1_diff": 0.6,
+      "cm_quality_impact_f1_diff": 0.6029507529507531
+    },
+    "raw_corpus_tokens_total": 2465216
+  },
+  "results": [
+    {
+      "id": "ext-locate-handle",
+      "repo": "external-express",
+      "kind": "locate",
+      "raw_tokens": 154076,
+      "code_map": {
+        "delivered_tokens": 39,
+        "saved_tokens": 154037,
+        "saved_percent": 0.999746878164023,
+        "elapsedMs": 22,
+        "eval": {
+          "top1": 1,
+          "top3": 1
+        },
+        "top1": "lib/application.js",
+        "topk": [
+          "lib/application.js"
+        ],
+        "usedFallback": false
+      },
+      "baseline": {
+        "delivered_tokens": 12064,
+        "saved_tokens": 142012,
+        "saved_percent": 0.9217009787377658,
+        "elapsedMs": 17,
+        "eval": {
+          "top1": 1,
+          "top3": 1
+        },
+        "top1": "lib/application.js",
+        "topk": [
+          "lib/application.js",
+          "lib/express.js",
+          "examples/auth/index.js"
+        ]
+      },
+      "head_to_head": {
+        "delivered_tokens_diff": -12025,
+        "delivered_tokens_ratio": 0.003232758620689655,
+        "cm_better_quality": false,
+        "cm_worse_quality": false
+      }
+    },
+    {
+      "id": "ext-locate-createApplication",
+      "repo": "external-express",
+      "kind": "locate",
+      "raw_tokens": 154076,
+      "code_map": {
+        "delivered_tokens": 40,
+        "saved_tokens": 154036,
+        "saved_percent": 0.9997403878605363,
+        "elapsedMs": 21,
+        "eval": {
+          "top1": 1,
+          "top3": 1
+        },
+        "top1": "lib/express.js",
+        "topk": [
+          "lib/express.js"
+        ],
+        "usedFallback": false
+      },
+      "baseline": {
+        "delivered_tokens": 511,
+        "saved_tokens": 153565,
+        "saved_percent": 0.996683454918352,
+        "elapsedMs": 9,
+        "eval": {
+          "top1": 1,
+          "top3": 1
+        },
+        "top1": "lib/express.js",
+        "topk": [
+          "lib/express.js"
+        ]
+      },
+      "head_to_head": {
+        "delivered_tokens_diff": -471,
+        "delivered_tokens_ratio": 0.07827788649706457,
+        "cm_better_quality": false,
+        "cm_worse_quality": false
+      }
+    },
+    {
+      "id": "ext-locate-sendFile",
+      "repo": "external-express",
+      "kind": "locate",
+      "raw_tokens": 154076,
+      "code_map": {
+        "delivered_tokens": 59,
+        "saved_tokens": 154017,
+        "saved_percent": 0.9996170720942912,
+        "elapsedMs": 21,
+        "eval": {
+          "top1": 1,
+          "top3": 1
+        },
+        "top1": "lib/response.js",
+        "topk": [
+          "lib/response.js",
+          "lib/response.js",
+          "lib/response.js"
+        ],
+        "usedFallback": false
+      },
+      "baseline": {
+        "delivered_tokens": 3722,
+        "saved_tokens": 150354,
+        "saved_percent": 0.9758430904229082,
+        "elapsedMs": 9,
+        "eval": {
+          "top1": 1,
+          "top3": 1
+        },
+        "top1": "lib/response.js",
+        "topk": [
+          "lib/response.js",
+          "test/res.sendFile.js",
+          "examples/search/index.js"
+        ]
+      },
+      "head_to_head": {
+        "delivered_tokens_diff": -3663,
+        "delivered_tokens_ratio": 0.01585169263836647,
+        "cm_better_quality": false,
+        "cm_worse_quality": false
+      }
+    },
+    {
+      "id": "ext-locate-cookie",
+      "repo": "external-express",
+      "kind": "locate",
+      "raw_tokens": 154076,
+      "code_map": {
+        "delivered_tokens": 38,
+        "saved_tokens": 154038,
+        "saved_percent": 0.9997533684675095,
+        "elapsedMs": 19,
+        "eval": {
+          "top1": 1,
+          "top3": 1
+        },
+        "top1": "lib/response.js",
+        "topk": [
+          "lib/response.js"
+        ],
+        "usedFallback": false
+      },
+      "baseline": {
+        "delivered_tokens": 14513,
+        "saved_tokens": 139563,
+        "saved_percent": 0.9058062254991044,
+        "elapsedMs": 16,
+        "eval": {
+          "top1": 0,
+          "top3": 1
+        },
+        "top1": "test/res.cookie.js",
+        "topk": [
+          "test/res.cookie.js",
+          "lib/response.js",
+          "test/res.append.js"
+        ]
+      },
+      "head_to_head": {
+        "delivered_tokens_diff": -14475,
+        "delivered_tokens_ratio": 0.002618342175980156,
+        "cm_better_quality": true,
+        "cm_worse_quality": false
+      }
+    },
+    {
+      "id": "ext-locate-View",
+      "repo": "external-express",
+      "kind": "locate",
+      "raw_tokens": 154076,
+      "code_map": {
+        "delivered_tokens": 87,
+        "saved_tokens": 153989,
+        "saved_percent": 0.9994353435966665,
+        "elapsedMs": 21,
+        "eval": {
+          "top1": 1,
+          "top3": 1
+        },
+        "top1": "lib/view.js",
+        "topk": [
+          "lib/view.js",
+          "examples/route-separation/user.js",
+          "test/app.render.js"
+        ],
+        "usedFallback": false
+      },
+      "baseline": {
+        "delivered_tokens": 2979,
+        "saved_tokens": 151097,
+        "saved_percent": 0.9806653859134453,
+        "elapsedMs": 8,
+        "eval": {
+          "top1": 0,
+          "top3": 0
+        },
+        "top1": "examples/ejs/index.js",
+        "topk": [
+          "examples/ejs/index.js",
+          "examples/session/index.js",
+          "examples/session/redis.js"
+        ]
+      },
+      "head_to_head": {
+        "delivered_tokens_diff": -2892,
+        "delivered_tokens_ratio": 0.02920443101711984,
+        "cm_better_quality": true,
+        "cm_worse_quality": false
+      }
+    },
+    {
+      "id": "ext-locate-compileETag",
+      "repo": "external-express",
+      "kind": "locate",
+      "raw_tokens": 154076,
+      "code_map": {
+        "delivered_tokens": 38,
+        "saved_tokens": 154038,
+        "saved_percent": 0.9997533684675095,
+        "elapsedMs": 19,
+        "eval": {
+          "top1": 1,
+          "top3": 1
+        },
+        "top1": "lib/utils.js",
+        "topk": [
+          "lib/utils.js"
+        ],
+        "usedFallback": false
+      },
+      "baseline": {
+        "delivered_tokens": 3981,
+        "saved_tokens": 150095,
+        "saved_percent": 0.974162101819881,
+        "elapsedMs": 7,
+        "eval": {
+          "top1": 0,
+          "top3": 1
+        },
+        "top1": "test/utils.js",
+        "topk": [
+          "test/utils.js",
+          "lib/application.js",
+          "lib/utils.js"
+        ]
+      },
+      "head_to_head": {
+        "delivered_tokens_diff": -3943,
+        "delivered_tokens_ratio": 0.009545340366742025,
+        "cm_better_quality": true,
+        "cm_worse_quality": false
+      }
+    },
+    {
+      "id": "ext-locate-acceptParams",
+      "repo": "external-express",
+      "kind": "locate",
+      "raw_tokens": 154076,
+      "code_map": {
+        "delivered_tokens": 38,
+        "saved_tokens": 154038,
+        "saved_percent": 0.9997533684675095,
+        "elapsedMs": 18,
+        "eval": {
+          "top1": 1,
+          "top3": 1
+        },
+        "top1": "lib/utils.js",
+        "topk": [
+          "lib/utils.js"
+        ],
+        "usedFallback": false
+      },
+      "baseline": {
+        "delivered_tokens": 2643,
+        "saved_tokens": 151433,
+        "saved_percent": 0.9828461278849399,
+        "elapsedMs": 7,
+        "eval": {
+          "top1": 1,
+          "top3": 1
+        },
+        "top1": "lib/utils.js",
+        "topk": [
+          "lib/utils.js",
+          "test/utils.js"
+        ]
+      },
+      "head_to_head": {
+        "delivered_tokens_diff": -2605,
+        "delivered_tokens_ratio": 0.014377601210745366,
+        "cm_better_quality": false,
+        "cm_worse_quality": false
+      }
+    },
+    {
+      "id": "ext-locate-engine",
+      "repo": "external-express",
+      "kind": "locate",
+      "raw_tokens": 154076,
+      "code_map": {
+        "delivered_tokens": 39,
+        "saved_tokens": 154037,
+        "saved_percent": 0.999746878164023,
+        "elapsedMs": 18,
+        "eval": {
+          "top1": 1,
+          "top3": 1
+        },
+        "top1": "lib/application.js",
+        "topk": [
+          "lib/application.js"
+        ],
+        "usedFallback": false
+      },
+      "baseline": {
+        "delivered_tokens": 11675,
+        "saved_tokens": 142401,
+        "saved_percent": 0.9242257067940497,
+        "elapsedMs": 18,
+        "eval": {
+          "top1": 0,
+          "top3": 1
+        },
+        "top1": "test/app.engine.js",
+        "topk": [
+          "test/app.engine.js",
+          "lib/application.js",
+          "examples/ejs/index.js"
+        ]
+      },
+      "head_to_head": {
+        "delivered_tokens_diff": -11636,
+        "delivered_tokens_ratio": 0.003340471092077088,
+        "cm_better_quality": true,
+        "cm_worse_quality": false
+      }
+    },
+    {
+      "id": "ext-locate-listen",
+      "repo": "external-express",
+      "kind": "locate",
+      "raw_tokens": 154076,
+      "code_map": {
+        "delivered_tokens": 39,
+        "saved_tokens": 154037,
+        "saved_percent": 0.999746878164023,
+        "elapsedMs": 20,
+        "eval": {
+          "top1": 1,
+          "top3": 1
+        },
+        "top1": "lib/application.js",
+        "topk": [
+          "lib/application.js"
+        ],
+        "usedFallback": false
+      },
+      "baseline": {
+        "delivered_tokens": 12444,
+        "saved_tokens": 141632,
+        "saved_percent": 0.9192346634128612,
+        "elapsedMs": 14,
+        "eval": {
+          "top1": 0,
+          "top3": 0
+        },
+        "top1": "test/app.listen.js",
+        "topk": [
+          "test/app.listen.js",
+          "test/res.sendFile.js",
+          "examples/auth/index.js"
+        ]
+      },
+      "head_to_head": {
+        "delivered_tokens_diff": -12405,
+        "delivered_tokens_ratio": 0.00313404050144648,
+        "cm_better_quality": true,
+        "cm_worse_quality": false
+      }
+    },
+    {
+      "id": "ext-locate-jsonp",
+      "repo": "external-express",
+      "kind": "locate",
+      "raw_tokens": 154076,
+      "code_map": {
+        "delivered_tokens": 38,
+        "saved_tokens": 154038,
+        "saved_percent": 0.9997533684675095,
+        "elapsedMs": 18,
+        "eval": {
+          "top1": 1,
+          "top3": 1
+        },
+        "top1": "lib/response.js",
+        "topk": [
+          "lib/response.js"
+        ],
+        "usedFallback": false
+      },
+      "baseline": {
+        "delivered_tokens": 14706,
+        "saved_tokens": 139370,
+        "saved_percent": 0.9045535969261923,
+        "elapsedMs": 16,
+        "eval": {
+          "top1": 0,
+          "top3": 1
+        },
+        "top1": "test/res.jsonp.js",
+        "topk": [
+          "test/res.jsonp.js",
+          "lib/response.js",
+          "examples/auth/index.js"
+        ]
+      },
+      "head_to_head": {
+        "delivered_tokens_diff": -14668,
+        "delivered_tokens_ratio": 0.002583979328165375,
+        "cm_better_quality": true,
+        "cm_worse_quality": false
+      }
+    },
+    {
+      "id": "ext-impact-utils",
+      "repo": "external-express",
+      "kind": "impact",
+      "raw_tokens": 154076,
+      "code_map": {
+        "delivered_tokens": 85,
+        "saved_tokens": 153991,
+        "saved_percent": 0.9994483242036397,
+        "elapsedMs": 18,
+        "eval": {
+          "tp": 2,
+          "fp": 4,
+          "fn": 1,
+          "precision": 0.3333333333333333,
+          "recall": 0.6666666666666666,
+          "f1": 0.4444444444444444
+        },
+        "impact": [
+          "test/app.router.js",
+          "test/res.send.js",
+          "test/Route.js",
+          "test/Router.js",
+          "test/utils.js",
+          "lib/application.js"
+        ],
+        "usedFallback": false
+      },
+      "baseline": {
+        "delivered_tokens": 5375,
+        "saved_tokens": 148701,
+        "saved_percent": 0.9651146187595732,
+        "elapsedMs": 12,
+        "eval": {
+          "tp": 3,
+          "fp": 9,
+          "fn": 0,
+          "precision": 0.25,
+          "recall": 1,
+          "f1": 0.4
+        },
+        "impact": [
+          "test/res.send.js",
+          "test/utils.js",
+          "test/express.static.js",
+          "test/res.download.js",
+          "test/res.sendFile.js",
+          "lib/application.js",
+          "test/res.redirect.js",
+          "lib/response.js",
+          "test/acceptance/cookies.js",
+          "test/app.router.js",
+          "test/res.jsonp.js",
+          "test/res.vary.js"
+        ]
+      },
+      "head_to_head": {
+        "delivered_tokens_diff": -5290,
+        "delivered_tokens_ratio": 0.01581395348837209,
+        "cm_better_quality": true,
+        "cm_worse_quality": false
+      }
+    },
+    {
+      "id": "ext-impact-view",
+      "repo": "external-express",
+      "kind": "impact",
+      "raw_tokens": 154076,
+      "code_map": {
+        "delivered_tokens": 29,
+        "saved_tokens": 154047,
+        "saved_percent": 0.9998117811988888,
+        "elapsedMs": 17,
+        "eval": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "impact": [
+          "lib/application.js"
+        ],
+        "usedFallback": false
+      },
+      "baseline": {
+        "delivered_tokens": 2979,
+        "saved_tokens": 151097,
+        "saved_percent": 0.9806653859134453,
+        "elapsedMs": 13,
+        "eval": {
+          "tp": 1,
+          "fp": 11,
+          "fn": 0,
+          "precision": 0.08333333333333333,
+          "recall": 1,
+          "f1": 0.15384615384615385
+        },
+        "impact": [
+          "examples/ejs/index.js",
+          "examples/session/index.js",
+          "examples/session/redis.js",
+          "examples/view-constructor/github-view.js",
+          "examples/view-constructor/index.js",
+          "lib/application.js",
+          "lib/response.js",
+          "test/acceptance/cookie-sessions.js",
+          "test/acceptance/route-separation.js",
+          "test/app.engine.js",
+          "test/app.render.js",
+          "test/app.router.js"
+        ]
+      },
+      "head_to_head": {
+        "delivered_tokens_diff": -2950,
+        "delivered_tokens_ratio": 0.009734810339039947,
+        "cm_better_quality": true,
+        "cm_worse_quality": false
+      }
+    },
+    {
+      "id": "ext-impact-express",
+      "repo": "external-express",
+      "kind": "impact",
+      "raw_tokens": 154076,
+      "code_map": {
+        "delivered_tokens": 58,
+        "saved_tokens": 154018,
+        "saved_percent": 0.9996235623977777,
+        "elapsedMs": 19,
+        "eval": {
+          "tp": 1,
+          "fp": 2,
+          "fn": 0,
+          "precision": 0.3333333333333333,
+          "recall": 1,
+          "f1": 0.5
+        },
+        "impact": [
+          "index.js",
+          "examples/route-middleware/index.js",
+          "examples/route-map/index.js"
+        ],
+        "usedFallback": false
+      },
+      "baseline": {
+        "delivered_tokens": 8694,
+        "saved_tokens": 145382,
+        "saved_percent": 0.9435733014875776,
+        "elapsedMs": 13,
+        "eval": {
+          "tp": 0,
+          "fp": 12,
+          "fn": 1,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "impact": [
+          "examples/auth/index.js",
+          "examples/ejs/index.js",
+          "examples/mvc/index.js",
+          "examples/route-separation/index.js",
+          "examples/session/redis.js",
+          "examples/static-files/index.js",
+          "examples/vhost/index.js",
+          "examples/view-constructor/index.js",
+          "lib/application.js",
+          "test/app.engine.js",
+          "test/app.js",
+          "test/app.listen.js"
+        ]
+      },
+      "head_to_head": {
+        "delivered_tokens_diff": -8636,
+        "delivered_tokens_ratio": 0.006671267540832759,
+        "cm_better_quality": true,
+        "cm_worse_quality": false
+      }
+    },
+    {
+      "id": "ext-impact-application",
+      "repo": "external-express",
+      "kind": "impact",
+      "raw_tokens": 154076,
+      "code_map": {
+        "delivered_tokens": 30,
+        "saved_tokens": 154046,
+        "saved_percent": 0.9998052908954023,
+        "elapsedMs": 18,
+        "eval": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "impact": [
+          "lib/express.js"
+        ],
+        "usedFallback": false
+      },
+      "baseline": {
+        "delivered_tokens": 6029,
+        "saved_tokens": 148047,
+        "saved_percent": 0.9608699602793427,
+        "elapsedMs": 12,
+        "eval": {
+          "tp": 1,
+          "fp": 11,
+          "fn": 0,
+          "precision": 0.08333333333333333,
+          "recall": 1,
+          "f1": 0.15384615384615385
+        },
+        "impact": [
+          "lib/express.js",
+          "lib/request.js",
+          "lib/response.js",
+          "test/exports.js",
+          "test/express.json.js",
+          "test/express.raw.js",
+          "test/express.urlencoded.js",
+          "test/req.accepts.js",
+          "test/req.is.js",
+          "test/res.format.js",
+          "test/res.json.js",
+          "test/res.jsonp.js"
+        ]
+      },
+      "head_to_head": {
+        "delivered_tokens_diff": -5999,
+        "delivered_tokens_ratio": 0.004975949577044286,
+        "cm_better_quality": true,
+        "cm_worse_quality": false
+      }
+    },
+    {
+      "id": "ext-impact-request",
+      "repo": "external-express",
+      "kind": "impact",
+      "raw_tokens": 154076,
+      "code_map": {
+        "delivered_tokens": 29,
+        "saved_tokens": 154047,
+        "saved_percent": 0.9998117811988888,
+        "elapsedMs": 19,
+        "eval": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "impact": [
+          "lib/express.js"
+        ],
+        "usedFallback": false
+      },
+      "baseline": {
+        "delivered_tokens": 6976,
+        "saved_tokens": 147100,
+        "saved_percent": 0.954723642877541,
+        "elapsedMs": 13,
+        "eval": {
+          "tp": 0,
+          "fp": 12,
+          "fn": 1,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "impact": [
+          "test/acceptance/auth.js",
+          "test/acceptance/content-negotiation.js",
+          "test/acceptance/cookie-sessions.js",
+          "test/acceptance/cookies.js",
+          "test/acceptance/downloads.js",
+          "test/acceptance/error-pages.js",
+          "test/acceptance/multi-router.js",
+          "test/acceptance/mvc.js",
+          "test/acceptance/params.js",
+          "test/acceptance/resource.js",
+          "test/acceptance/route-map.js",
+          "test/acceptance/route-separation.js"
+        ]
+      },
+      "head_to_head": {
+        "delivered_tokens_diff": -6947,
+        "delivered_tokens_ratio": 0.0041571100917431195,
+        "cm_better_quality": true,
+        "cm_worse_quality": false
+      }
+    },
+    {
+      "id": "ext-impact-response",
+      "repo": "external-express",
+      "kind": "impact",
+      "raw_tokens": 154076,
+      "code_map": {
+        "delivered_tokens": 29,
+        "saved_tokens": 154047,
+        "saved_percent": 0.9998117811988888,
+        "elapsedMs": 18,
+        "eval": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 1,
+          "precision": 1,
+          "recall": 0.5,
+          "f1": 0.6666666666666666
+        },
+        "impact": [
+          "lib/express.js"
+        ],
+        "usedFallback": false
+      },
+      "baseline": {
+        "delivered_tokens": 3972,
+        "saved_tokens": 150104,
+        "saved_percent": 0.9742205145512605,
+        "elapsedMs": 13,
+        "eval": {
+          "tp": 2,
+          "fp": 10,
+          "fn": 0,
+          "precision": 0.16666666666666666,
+          "recall": 1,
+          "f1": 0.2857142857142857
+        },
+        "impact": [
+          "test/app.response.js",
+          "test/exports.js",
+          "test/res.status.js",
+          "test/support/utils.js",
+          "lib/express.js",
+          "lib/application.js",
+          "test/res.send.js",
+          "test/res.set.js",
+          "examples/content-negotiation/index.js",
+          "examples/mvc/index.js",
+          "examples/search/public/client.js",
+          "test/app.options.js"
+        ]
+      },
+      "head_to_head": {
+        "delivered_tokens_diff": -3943,
+        "delivered_tokens_ratio": 0.00730110775427996,
+        "cm_better_quality": true,
+        "cm_worse_quality": false
+      }
+    }
+  ]
+}

@@ -266,6 +266,49 @@ Each writes a snapshot to `.code-map/benchmark.json` with per-task hits, recall,
 
 See [docs/REPORT.md](docs/REPORT.md) for the final report and [docs/ITERATIONS.md](docs/ITERATIONS.md) for the score-tracked improvement loop.
 
+---
+
+## Honest harness + external validation
+
+The self-benchmark above measures Code Map against an intentionally weak baseline. To stop overfitting, the repo also ships a **deterministic harness** that runs the same task suite through Code Map and a programmatic `grep + selective-read` baseline using **identical token accounting** on both sides.
+
+```bash
+# internal suite (3 synthetic repos)
+node scripts/harness/run.js --variant=v6-payload-slim --fresh \
+  --out=scripts/harness/results/after-final.json
+
+# external suite (real expressjs/express clone)
+node scripts/harness/run.js --suite=suite-external.json --variant=v6-payload-slim --fresh \
+  --out=scripts/harness/results/ext-after-A1A6.json
+```
+
+Validated outcome on `expressjs/express` (16 tasks, never seen during development):
+
+| metric | default Code Map | optimized (this repo) | grep+read baseline |
+|---|---|---|---|
+| top-1 locate | 0.30 | **1.00** | 0.40 |
+| top-3 locate | 0.30 | **1.00** | 0.80 |
+| impact F1 | 0.30 | **0.77** | 0.17 |
+| delivered tokens | 15,233 | **715** | 113,263 |
+| savings vs baseline | 86.6% | **99.4%** | — |
+
+Reports: [docs/IMPROVEMENT_REPORT.md](docs/IMPROVEMENT_REPORT.md), [docs/EXTERNAL_VALIDATION_V1.md](docs/EXTERNAL_VALIDATION_V1.md), [docs/EXTERNAL_VALIDATION_V2.md](docs/EXTERNAL_VALIDATION_V2.md).
+
+### Optional flags
+
+All optimizations are gated behind environment flags. Defaults preserve legacy behavior.
+
+| flag | what it does |
+|---|---|
+| `CM_HONEST_ACCOUNTING=1` | `cm_stats` ledger counts JSON-byte tokens of actual payloads, not hit counts |
+| `CM_STALE_WARN=1` | tags responses with `stale:true` and lowers `confidence` when repo fingerprint changed since last sync |
+| `CM_PARSER_AST=1` | enables dynamic-import registry detection and the new method-assignment parser patterns |
+| `CM_IMPACT_TYPED=1` | uses direction-correct `impactPrecise` BFS (precision-first) instead of bidirectional weighted BFS |
+| `CM_SCAN_FILTER=1` | indexes only source extensions; drops lockfiles, JSON, markdown, configs that bloat search |
+| `CM_PAYLOAD_SLIM=1` | strips verbose response fields; impact defaults to direct mode (depth=1, no anchor edges); resolver returns confidence + suggest_fallback |
+
+Recommended preset: enable all six. The `v6-payload-slim` harness variant in [`scripts/harness/variants.json`](scripts/harness/variants.json) sets exactly that combination.
+
 ## License
 
 MIT.

@@ -1,0 +1,131 @@
+{
+  "version": 1,
+  "note": "External validation suite. Repo: expressjs/express, cloned fresh — never seen by Code Map development. Ground truth verified by grep + read, not guessing.",
+  "repos": {
+    "external-express": "../../../external-express"
+  },
+  "tasks": [
+    {
+      "id": "ext-locate-handle",
+      "repo": "external-express",
+      "kind": "locate",
+      "query": "app.handle",
+      "expected_top1": "lib/application.js",
+      "expected_topk": ["lib/application.js"]
+    },
+    {
+      "id": "ext-locate-createApplication",
+      "repo": "external-express",
+      "kind": "locate",
+      "query": "createApplication",
+      "expected_top1": "lib/express.js",
+      "expected_topk": ["lib/express.js"]
+    },
+    {
+      "id": "ext-locate-sendFile",
+      "repo": "external-express",
+      "kind": "locate",
+      "query": "sendFile",
+      "expected_top1": "lib/response.js",
+      "expected_topk": ["lib/response.js"]
+    },
+    {
+      "id": "ext-locate-cookie",
+      "repo": "external-express",
+      "kind": "locate",
+      "query": "res.cookie",
+      "expected_top1": "lib/response.js",
+      "expected_topk": ["lib/response.js"]
+    },
+    {
+      "id": "ext-locate-View",
+      "repo": "external-express",
+      "kind": "locate",
+      "query": "View",
+      "expected_top1": "lib/view.js",
+      "expected_topk": ["lib/view.js"]
+    },
+    {
+      "id": "ext-locate-compileETag",
+      "repo": "external-express",
+      "kind": "locate",
+      "query": "compileETag",
+      "expected_top1": "lib/utils.js",
+      "expected_topk": ["lib/utils.js"]
+    },
+    {
+      "id": "ext-locate-acceptParams",
+      "repo": "external-express",
+      "kind": "locate",
+      "query": "acceptParams",
+      "expected_top1": "lib/utils.js",
+      "expected_topk": ["lib/utils.js"]
+    },
+    {
+      "id": "ext-locate-engine",
+      "repo": "external-express",
+      "kind": "locate",
+      "query": "app.engine",
+      "expected_top1": "lib/application.js",
+      "expected_topk": ["lib/application.js"]
+    },
+    {
+      "id": "ext-locate-listen",
+      "repo": "external-express",
+      "kind": "locate",
+      "query": "app.listen",
+      "expected_top1": "lib/application.js",
+      "expected_topk": ["lib/application.js"]
+    },
+    {
+      "id": "ext-locate-jsonp",
+      "repo": "external-express",
+      "kind": "locate",
+      "query": "res.jsonp",
+      "expected_top1": "lib/response.js",
+      "expected_topk": ["lib/response.js"]
+    },
+    {
+      "id": "ext-impact-utils",
+      "repo": "external-express",
+      "kind": "impact",
+      "target": "lib/utils.js",
+      "expected_impact": ["lib/application.js", "lib/response.js", "test/utils.js"]
+    },
+    {
+      "id": "ext-impact-view",
+      "repo": "external-express",
+      "kind": "impact",
+      "target": "lib/view.js",
+      "expected_impact": ["lib/application.js"]
+    },
+    {
+      "id": "ext-impact-express",
+      "repo": "external-express",
+      "kind": "impact",
+      "target": "lib/express.js",
+      "expected_impact": ["index.js"]
+    },
+    {
+      "id": "ext-impact-application",
+      "repo": "external-express",
+      "kind": "impact",
+      "target": "lib/application.js",
+      "expected_impact": ["lib/express.js"]
+    },
+    {
+      "id": "ext-impact-request",
+      "repo": "external-express",
+      "kind": "impact",
+      "target": "lib/request.js",
+      "expected_impact": ["lib/express.js"]
+    },
+    {
+      "id": "ext-impact-response",
+      "repo": "external-express",
+      "kind": "impact",
+      "target": "lib/response.js",
+      "expected_impact": ["lib/express.js", "test/res.send.js"]
+    }
+  ]
+}

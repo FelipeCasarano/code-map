@@ -1,0 +1,153 @@
+{
+  "version": 1,
+  "note": "Ground truth tasks. file paths are POSIX, relative to repo root. impact lists files an honest reviewer would call 'truly affected' by editing the target.",
+  "repos": {
+    "realworld-node": "../../../realworld-node",
+    "greenfield-mini-api": "../../../greenfield-mini-api",
+    "adversarial-repo": "../../../adversarial-repo"
+  },
+  "tasks": [
+    {
+      "id": "rw-locate-login",
+      "repo": "realworld-node",
+      "kind": "locate",
+      "query": "POST /users/login",
+      "expected_top1": "src/app/routes/auth/auth.controller.ts",
+      "expected_topk": ["src/app/routes/auth/auth.controller.ts", "src/app/routes/auth/auth.service.ts"]
+    },
+    {
+      "id": "rw-locate-route-register",
+      "repo": "realworld-node",
+      "kind": "locate",
+      "query": "register routes",
+      "expected_top1": "src/app/routes/routes.ts",
+      "expected_topk": ["src/app/routes/routes.ts"]
+    },
+    {
+      "id": "rw-locate-token-util",
+      "repo": "realworld-node",
+      "kind": "locate",
+      "query": "generateToken",
+      "expected_top1": "src/app/routes/auth/token.utils.ts",
+      "expected_topk": ["src/app/routes/auth/token.utils.ts", "src/app/routes/auth/auth.service.ts"]
+    },
+    {
+      "id": "rw-locate-prisma",
+      "repo": "realworld-node",
+      "kind": "locate",
+      "query": "prisma client",
+      "expected_top1": "src/prisma/prisma-client.ts",
+      "expected_topk": ["src/prisma/prisma-client.ts"]
+    },
+    {
+      "id": "rw-impact-token-utils",
+      "repo": "realworld-node",
+      "kind": "impact",
+      "target": "src/app/routes/auth/token.utils.ts",
+      "expected_impact": [
+        "src/app/routes/auth/auth.service.ts",
+        "src/app/routes/auth/auth.controller.ts",
+        "src/tests/services/auth.service.test.ts"
+      ]
+    },
+    {
+      "id": "rw-impact-auth-service",
+      "repo": "realworld-node",
+      "kind": "impact",
+      "target": "src/app/routes/auth/auth.service.ts",
+      "expected_impact": [
+        "src/app/routes/auth/auth.controller.ts",
+        "src/tests/services/auth.service.test.ts",
+        "src/prisma/seed.ts"
+      ]
+    },
+    {
+      "id": "gf-locate-vip",
+      "repo": "greenfield-mini-api",
+      "kind": "locate",
+      "query": "VIP_DISCOUNT_RATE",
+      "expected_top1": "src/domain/discountRules.js",
+      "expected_topk": ["src/domain/discountRules.js"]
+    },
+    {
+      "id": "gf-locate-quote-route",
+      "repo": "greenfield-mini-api",
+      "kind": "locate",
+      "query": "POST /quotes",
+      "expected_top1": "src/routes/orders.js",
+      "expected_topk": ["src/routes/orders.js"]
+    },
+    {
+      "id": "gf-locate-pricing",
+      "repo": "greenfield-mini-api",
+      "kind": "locate",
+      "query": "calculateTotal",
+      "expected_top1": "src/services/pricingService.js",
+      "expected_topk": ["src/services/pricingService.js", "tests/pricingService.test.js"]
+    },
+    {
+      "id": "gf-impact-discount-rules",
+      "repo": "greenfield-mini-api",
+      "kind": "impact",
+      "target": "src/domain/discountRules.js",
+      "expected_impact": [
+        "src/services/pricingService.js",
+        "tests/pricingService.test.js"
+      ]
+    },
+    {
+      "id": "gf-impact-money",
+      "repo": "greenfield-mini-api",
+      "kind": "impact",
+      "target": "src/utils/money.js",
+      "expected_impact": [
+        "src/services/pricingService.js",
+        "tests/pricingService.test.js"
+      ]
+    },
+    {
+      "id": "adv-locate-api-login",
+      "repo": "adversarial-repo",
+      "kind": "locate",
+      "query": "POST /login",
+      "expected_top1": "packages/api/src/routes/login.ts",
+      "expected_topk": ["packages/api/src/routes/login.ts", "packages/api/src/handlers/login.ts"]
+    },
+    {
+      "id": "adv-locate-handler-login",
+      "repo": "adversarial-repo",
+      "kind": "locate",
+      "query": "loginHandler",
+      "expected_top1": "packages/api/src/handlers/login.ts",
+      "expected_topk": ["packages/api/src/handlers/login.ts", "packages/api/src/routes/login.ts"]
+    },
+    {
+      "id": "adv-locate-worker-login",
+      "repo": "adversarial-repo",
+      "kind": "locate",
+      "query": "run_login_task",
+      "expected_top1": "packages/worker/tasks/login.py",
+      "expected_topk": ["packages/worker/tasks/login.py"]
+    },
+    {
+      "id": "adv-impact-handler-login",
+      "repo": "adversarial-repo",
+      "kind": "impact",
+      "target": "packages/api/src/handlers/login.ts",
+      "expected_impact": [
+        "packages/api/src/routes/login.ts",
+        "packages/api/src/registry.ts",
+        "tests/login.spec.ts"
+      ]
+    },
+    {
+      "id": "adv-impact-registry",
+      "repo": "adversarial-repo",
+      "kind": "impact",
+      "target": "packages/api/src/registry.ts",
+      "expected_impact": [
+        "packages/api/src/handlers/login.ts"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,793 @@
+{
+  "variant": "default",
+  "flags": {},
+  "generatedAt": "2026-04-29T12:39:19.372Z",
+  "aggregate": {
+    "n_tasks": 16,
+    "n_locate": 10,
+    "n_impact": 6,
+    "code_map": {
+      "delivered_tokens_total": 10040,
+      "saved_vs_raw_pct": 0.8974987238386932,
+      "top1_acc": 0.9,
+      "top3_acc": 0.9,
+      "impact_f1": 0.48333333333333334,
+      "impact_recall": 0.7777777777777778,
+      "impact_precision": 0.375
+    },
+    "baseline": {
+      "delivered_tokens_total": 18397,
+      "saved_vs_raw_pct": 0.8121796835119959,
+      "top1_acc": 0.5,
+      "top3_acc": 0.9,
+      "impact_f1": 0.563131313131313,
+      "impact_recall": 0.5555555555555555,
+      "impact_precision": 0.7291666666666666
+    },
+    "head_to_head": {
+      "delivered_tokens_ratio_cm_over_baseline": 0.5457411534489319,
+      "cm_saves_vs_baseline_pct": 0.45425884655106813,
+      "cm_quality_locate_top1_diff": 0.4,
+      "cm_quality_impact_f1_diff": -0.0797979797979797
+    },
+    "raw_corpus_tokens_total": 97950
+  },
+  "results": [
+    {
+      "id": "rw-locate-login",
+      "repo": "realworld-node",
+      "kind": "locate",
+      "raw_tokens": 15320,
+      "code_map": {
+        "delivered_tokens": 69,
+        "saved_tokens": 15251,
+        "saved_percent": 0.9954960835509138,
+        "elapsedMs": 2,
+        "eval": {
+          "top1": 1,
+          "top3": 1
+        },
+        "top1": "src/app/routes/auth/auth.controller.ts",
+        "topk": [
+          "src/app/routes/auth/auth.controller.ts"
+        ],
+        "usedFallback": false
+      },
+      "baseline": {
+        "delivered_tokens": 4100,
+        "saved_tokens": 11220,
+        "saved_percent": 0.7323759791122716,
+        "elapsedMs": 5,
+        "eval": {
+          "top1": 1,
+          "top3": 1
+        },
+        "top1": "src/app/routes/auth/auth.controller.ts",
+        "topk": [
+          "src/app/routes/auth/auth.controller.ts",
+          "src/app/routes/article/article.controller.ts",
+          "src/tests/services/auth.service.test.ts"
+        ]
+      },
+      "head_to_head": {
+        "delivered_tokens_diff": -4031,
+        "delivered_tokens_ratio": 0.016829268292682928,
+        "cm_better_quality": false,
+        "cm_worse_quality": false
+      }
+    },
+    {
+      "id": "rw-locate-route-register",
+      "repo": "realworld-node",
+      "kind": "locate",
+      "raw_tokens": 15320,
+      "code_map": {
+        "delivered_tokens": 135,
+        "saved_tokens": 15185,
+        "saved_percent": 0.9911879895561357,
+        "elapsedMs": 4,
+        "eval": {
+          "top1": 0,
+          "top3": 0
+        },
+        "top1": "src/app/routes/auth/register-input.model.ts",
+        "topk": [
+          "src/app/routes/auth/register-input.model.ts",
+          "src/app/routes/auth/auth.service.ts",
+          "package.json"
+        ],
+        "usedFallback": true
+      },
+      "baseline": {
+        "delivered_tokens": 2410,
+        "saved_tokens": 12910,
+        "saved_percent": 0.8426892950391645,
+        "elapsedMs": 4,
+        "eval": {
+          "top1": 0,
+          "top3": 0
+        },
+        "top1": "src/prisma/seed.ts",
+        "topk": [
+          "src/prisma/seed.ts",
+          "src/app/routes/auth/auth.service.ts",
+          "src/main.ts"
+        ]
+      },
+      "head_to_head": {
+        "delivered_tokens_diff": -2275,
+        "delivered_tokens_ratio": 0.056016597510373446,
+        "cm_better_quality": false,
+        "cm_worse_quality": false
+      }
+    },
+    {
+      "id": "rw-locate-token-util",
+      "repo": "realworld-node",
+      "kind": "locate",
+      "raw_tokens": 15320,
+      "code_map": {
+        "delivered_tokens": 72,
+        "saved_tokens": 15248,
+        "saved_percent": 0.9953002610966057,
+        "elapsedMs": 3,
+        "eval": {
+          "top1": 1,
+          "top3": 1
+        },
+        "top1": "src/app/routes/auth/token.utils.ts",
+        "topk": [
+          "src/app/routes/auth/token.utils.ts",
+          "src/app/routes/auth/auth.service.ts"
+        ],
+        "usedFallback": true
+      },
+      "baseline": {
+        "delivered_tokens": 1362,
+        "saved_tokens": 13958,
+        "saved_percent": 0.9110966057441253,
+        "elapsedMs": 3,
+        "eval": {
+          "top1": 0,
+          "top3": 1
+        },
+        "top1": "src/app/routes/auth/auth.service.ts",
+        "topk": [
+          "src/app/routes/auth/auth.service.ts",
+          "src/app/routes/auth/token.utils.ts"
+        ]
+      },
+      "head_to_head": {
+        "delivered_tokens_diff": -1290,
+        "delivered_tokens_ratio": 0.05286343612334802,
+        "cm_better_quality": true,
+        "cm_worse_quality": false
+      }
+    },
+    {
+      "id": "rw-locate-prisma",
+      "repo": "realworld-node",
+      "kind": "locate",
+      "raw_tokens": 15320,
+      "code_map": {
+        "delivered_tokens": 137,
+        "saved_tokens": 15183,
+        "saved_percent": 0.9910574412532637,
+        "elapsedMs": 4,
+        "eval": {
+          "top1": 1,
+          "top3": 1
+        },
+        "top1": "src/prisma/prisma-client.ts",
+        "topk": [
+          "src/prisma/prisma-client.ts",
+          "src/tests/prisma-mock.ts",
+          "src/app/routes/tag/tag.service.ts"
+        ],
+        "usedFallback": true
+      },
+      "baseline": {
+        "delivered_tokens": 3542,
+        "saved_tokens": 11778,
+        "saved_percent": 0.768798955613577,
+        "elapsedMs": 3,
+        "eval": {
+          "top1": 1,
+          "top3": 1
+        },
+        "top1": "src/prisma/prisma-client.ts",
+        "topk": [
+          "src/prisma/prisma-client.ts",
+          "src/app/routes/article/article.service.ts",
+          "src/app/routes/auth/auth.service.ts"
+        ]
+      },
+      "head_to_head": {
+        "delivered_tokens_diff": -3405,
+        "delivered_tokens_ratio": 0.03867871259175607,
+        "cm_better_quality": false,
+        "cm_worse_quality": false
+      }
+    },
+    {
+      "id": "rw-impact-token-utils",
+      "repo": "realworld-node",
+      "kind": "impact",
+      "raw_tokens": 15320,
+      "code_map": {
+        "delivered_tokens": 1473,
+        "saved_tokens": 13847,
+        "saved_percent": 0.9038511749347259,
+        "elapsedMs": 2,
+        "eval": {
+          "tp": 3,
+          "fp": 6,
+          "fn": 0,
+          "precision": 0.3333333333333333,
+          "recall": 1,
+          "f1": 0.5
+        },
+        "impact": [
+          "src/app/routes/auth/auth.service.ts",
+          "src/tests/services/auth.service.test.ts",
+          "src/prisma/seed.ts",
+          "src/app/routes/auth/auth.controller.ts",
+          "src/app/routes/auth/register-input.model.ts",
+          "src/prisma/prisma-client.ts",
+          "src/app/models/http-exception.model.ts",
+          "src/app/routes/auth/registered-user.model.ts",
+          "src/app/routes/auth/user.model.ts"
+        ],
+        "usedFallback": false
+      },
+      "baseline": {
+        "delivered_tokens": 1176,
+        "saved_tokens": 14144,
+        "saved_percent": 0.9232375979112272,
+        "elapsedMs": 3,
+        "eval": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 2,
+          "precision": 1,
+          "recall": 0.3333333333333333,
+          "f1": 0.5
+        },
+        "impact": [
+          "src/app/routes/auth/auth.service.ts"
+        ]
+      },
+      "head_to_head": {
+        "delivered_tokens_diff": 297,
+        "delivered_tokens_ratio": 1.2525510204081634,
+        "cm_better_quality": false,
+        "cm_worse_quality": false
+      }
+    },
+    {
+      "id": "rw-impact-auth-service",
+      "repo": "realworld-node",
+      "kind": "impact",
+      "raw_tokens": 15320,
+      "code_map": {
+        "delivered_tokens": 4788,
+        "saved_tokens": 10532,
+        "saved_percent": 0.687467362924282,
+        "elapsedMs": 2,
+        "eval": {
+          "tp": 3,
+          "fp": 9,
+          "fn": 0,
+          "precision": 0.25,
+          "recall": 1,
+          "f1": 0.4
+        },
+        "impact": [
+          "src/tests/services/auth.service.test.ts",
+          "src/prisma/seed.ts",
+          "src/app/routes/auth/auth.controller.ts",
+          "src/app/routes/auth/register-input.model.ts",
+          "src/prisma/prisma-client.ts",
+          "src/app/models/http-exception.model.ts",
+          "src/app/routes/auth/registered-user.model.ts",
+          "src/app/routes/auth/token.utils.ts",
+          "src/app/routes/auth/user.model.ts",
+          "src/tests/prisma-mock.ts",
+          "src/app/routes/article/article.service.ts",
+          "src/app/routes/tag/tag.service.ts",
+          "src/app/routes/profile/profile.service.ts",
+          "src/main.ts",
+          "src/app/routes/profile/profile.utils.ts",
+          "src/app/routes/article/article.model.ts",
+          "src/app/routes/article/comment.model.ts",
+          "src/app/routes/article/author.mapper.ts",
+          "src/app/routes/routes.ts",
+          "src/app/routes/auth/auth.ts"
+        ],
+        "usedFallback": false
+      },
+      "baseline": {
+        "delivered_tokens": 2681,
+        "saved_tokens": 12639,
+        "saved_percent": 0.825,
+        "elapsedMs": 4,
+        "eval": {
+          "tp": 3,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "impact": [
+          "src/app/routes/auth/auth.controller.ts",
+          "src/prisma/seed.ts",
+          "src/tests/services/auth.service.test.ts"
+        ]
+      },
+      "head_to_head": {
+        "delivered_tokens_diff": 2107,
+        "delivered_tokens_ratio": 1.7859007832898173,
+        "cm_better_quality": false,
+        "cm_worse_quality": true
+      }
+    },
+    {
+      "id": "gf-locate-vip",
+      "repo": "greenfield-mini-api",
+      "kind": "locate",
+      "raw_tokens": 906,
+      "code_map": {
+        "delivered_tokens": 47,
+        "saved_tokens": 859,
+        "saved_percent": 0.9481236203090507,
+        "elapsedMs": 2,
+        "eval": {
+          "top1": 1,
+          "top3": 1
+        },
+        "top1": "src/domain/discountRules.js",
+        "topk": [
+          "src/domain/discountRules.js"
+        ],
+        "usedFallback": true
+      },
+      "baseline": {
+        "delivered_tokens": 211,
+        "saved_tokens": 695,
+        "saved_percent": 0.7671081677704195,
+        "elapsedMs": 0,
+        "eval": {
+          "top1": 1,
+          "top3": 1
+        },
+        "top1": "src/domain/discountRules.js",
+        "topk": [
+          "src/domain/discountRules.js"
+        ]
+      },
+      "head_to_head": {
+        "delivered_tokens_diff": -164,
+        "delivered_tokens_ratio": 0.22274881516587677,
+        "cm_better_quality": false,
+        "cm_worse_quality": false
+      }
+    },
+    {
+      "id": "gf-locate-quote-route",
+      "repo": "greenfield-mini-api",
+      "kind": "locate",
+      "raw_tokens": 906,
+      "code_map": {
+        "delivered_tokens": 61,
+        "saved_tokens": 845,
+        "saved_percent": 0.9326710816777042,
+        "elapsedMs": 1,
+        "eval": {
+          "top1": 1,
+          "top3": 1
+        },
+        "top1": "src/routes/orders.js",
+        "topk": [
+          "src/routes/orders.js"
+        ],
+        "usedFallback": false
+      },
+      "baseline": {
+        "delivered_tokens": 169,
+        "saved_tokens": 737,
+        "saved_percent": 0.8134657836644592,
+        "elapsedMs": 1,
+        "eval": {
+          "top1": 1,
+          "top3": 1
+        },
+        "top1": "src/routes/orders.js",
+        "topk": [
+          "src/routes/orders.js"
+        ]
+      },
+      "head_to_head": {
+        "delivered_tokens_diff": -108,
+        "delivered_tokens_ratio": 0.3609467455621302,
+        "cm_better_quality": false,
+        "cm_worse_quality": false
+      }
+    },
+    {
+      "id": "gf-locate-pricing",
+      "repo": "greenfield-mini-api",
+      "kind": "locate",
+      "raw_tokens": 906,
+      "code_map": {
+        "delivered_tokens": 66,
+        "saved_tokens": 840,
+        "saved_percent": 0.9271523178807947,
+        "elapsedMs": 1,
+        "eval": {
+          "top1": 1,
+          "top3": 1
+        },
+        "top1": "src/services/pricingService.js",
+        "topk": [
+          "src/services/pricingService.js"
+        ],
+        "usedFallback": false
+      },
+      "baseline": {
+        "delivered_tokens": 705,
+        "saved_tokens": 201,
+        "saved_percent": 0.22185430463576158,
+        "elapsedMs": 0,
+        "eval": {
+          "top1": 0,
+          "top3": 1
+        },
+        "top1": "tests/pricingService.test.js",
+        "topk": [
+          "tests/pricingService.test.js",
+          "src/services/pricingService.js",
+          "src/services/orderService.js"
+        ]
+      },
+      "head_to_head": {
+        "delivered_tokens_diff": -639,
+        "delivered_tokens_ratio": 0.09361702127659574,
+        "cm_better_quality": true,
+        "cm_worse_quality": false
+      }
+    },
+    {
+      "id": "gf-impact-discount-rules",
+      "repo": "greenfield-mini-api",
+      "kind": "impact",
+      "raw_tokens": 906,
+      "code_map": {
+        "delivered_tokens": 955,
+        "saved_tokens": 0,
+        "saved_percent": -0.05408388520971302,
+        "elapsedMs": 1,
+        "eval": {
+          "tp": 2,
+          "fp": 2,
+          "fn": 0,
+          "precision": 0.5,
+          "recall": 1,
+          "f1": 0.6666666666666666
+        },
+        "impact": [
+          "src/services/pricingService.js",
+          "tests/pricingService.test.js",
+          "src/services/orderService.js",
+          "src/utils/money.js"
+        ],
+        "usedFallback": false
+      },
+      "baseline": {
+        "delivered_tokens": 246,
+        "saved_tokens": 660,
+        "saved_percent": 0.7284768211920529,
+        "elapsedMs": 1,
+        "eval": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 1,
+          "precision": 1,
+          "recall": 0.5,
+          "f1": 0.6666666666666666
+        },
+        "impact": [
+          "src/services/pricingService.js"
+        ]
+      },
+      "head_to_head": {
+        "delivered_tokens_diff": 709,
+        "delivered_tokens_ratio": 3.8821138211382116,
+        "cm_better_quality": false,
+        "cm_worse_quality": false
+      }
+    },
+    {
+      "id": "gf-impact-money",
+      "repo": "greenfield-mini-api",
+      "kind": "impact",
+      "raw_tokens": 906,
+      "code_map": {
+        "delivered_tokens": 845,
+        "saved_tokens": 61,
+        "saved_percent": 0.0673289183222958,
+        "elapsedMs": 0,
+        "eval": {
+          "tp": 2,
+          "fp": 2,
+          "fn": 0,
+          "precision": 0.5,
+          "recall": 1,
+          "f1": 0.6666666666666666
+        },
+        "impact": [
+          "src/services/pricingService.js",
+          "tests/pricingService.test.js",
+          "src/services/orderService.js",
+          "src/domain/discountRules.js"
+        ],
+        "usedFallback": false
+      },
+      "baseline": {
+        "delivered_tokens": 292,
+        "saved_tokens": 614,
+        "saved_percent": 0.6777041942604857,
+        "elapsedMs": 1,
+        "eval": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 1,
+          "precision": 1,
+          "recall": 0.5,
+          "f1": 0.6666666666666666
+        },
+        "impact": [
+          "src/services/pricingService.js"
+        ]
+      },
+      "head_to_head": {
+        "delivered_tokens_diff": 553,
+        "delivered_tokens_ratio": 2.893835616438356,
+        "cm_better_quality": false,
+        "cm_worse_quality": false
+      }
+    },
+    {
+      "id": "adv-locate-api-login",
+      "repo": "adversarial-repo",
+      "kind": "locate",
+      "raw_tokens": 300,
+      "code_map": {
+        "delivered_tokens": 64,
+        "saved_tokens": 236,
+        "saved_percent": 0.7866666666666666,
+        "elapsedMs": 1,
+        "eval": {
+          "top1": 1,
+          "top3": 1
+        },
+        "top1": "packages/api/src/routes/login.ts",
+        "topk": [
+          "packages/api/src/routes/login.ts"
+        ],
+        "usedFallback": false
+      },
+      "baseline": {
+        "delivered_tokens": 621,
+        "saved_tokens": 0,
+        "saved_percent": -1.07,
+        "elapsedMs": 1,
+        "eval": {
+          "top1": 1,
+          "top3": 1
+        },
+        "top1": "packages/api/src/routes/login.ts",
+        "topk": [
+          "packages/api/src/routes/login.ts",
+          "packages/api/src/index.ts",
+          "tests/login.spec.ts"
+        ]
+      },
+      "head_to_head": {
+        "delivered_tokens_diff": -557,
+        "delivered_tokens_ratio": 0.10305958132045089,
+        "cm_better_quality": false,
+        "cm_worse_quality": false
+      }
+    },
+    {
+      "id": "adv-locate-handler-login",
+      "repo": "adversarial-repo",
+      "kind": "locate",
+      "raw_tokens": 300,
+      "code_map": {
+        "delivered_tokens": 66,
+        "saved_tokens": 234,
+        "saved_percent": 0.78,
+        "elapsedMs": 1,
+        "eval": {
+          "top1": 1,
+          "top3": 1
+        },
+        "top1": "packages/api/src/handlers/login.ts",
+        "topk": [
+          "packages/api/src/handlers/login.ts"
+        ],
+        "usedFallback": false
+      },
+      "baseline": {
+        "delivered_tokens": 231,
+        "saved_tokens": 69,
+        "saved_percent": 0.23,
+        "elapsedMs": 1,
+        "eval": {
+          "top1": 0,
+          "top3": 1
+        },
+        "top1": "packages/api/src/routes/login.ts",
+        "topk": [
+          "packages/api/src/routes/login.ts",
+          "tests/login.spec.ts",
+          "packages/api/src/handlers/index.ts"
+        ]
+      },
+      "head_to_head": {
+        "delivered_tokens_diff": -165,
+        "delivered_tokens_ratio": 0.2857142857142857,
+        "cm_better_quality": true,
+        "cm_worse_quality": false
+      }
+    },
+    {
+      "id": "adv-locate-worker-login",
+      "repo": "adversarial-repo",
+      "kind": "locate",
+      "raw_tokens": 300,
+      "code_map": {
+        "delivered_tokens": 66,
+        "saved_tokens": 234,
+        "saved_percent": 0.78,
+        "elapsedMs": 0,
+        "eval": {
+          "top1": 1,
+          "top3": 1
+        },
+        "top1": "packages/worker/tasks/login.py",
+        "topk": [
+          "packages/worker/tasks/login.py"
+        ],
+        "usedFallback": false
+      },
+      "baseline": {
+        "delivered_tokens": 84,
+        "saved_tokens": 216,
+        "saved_percent": 0.72,
+        "elapsedMs": 1,
+        "eval": {
+          "top1": 0,
+          "top3": 1
+        },
+        "top1": "packages/worker/main.py",
+        "topk": [
+          "packages/worker/main.py",
+          "packages/worker/tasks/login.py"
+        ]
+      },
+      "head_to_head": {
+        "delivered_tokens_diff": -18,
+        "delivered_tokens_ratio": 0.7857142857142857,
+        "cm_better_quality": true,
+        "cm_worse_quality": false
+      }
+    },
+    {
+      "id": "adv-impact-handler-login",
+      "repo": "adversarial-repo",
+      "kind": "impact",
+      "raw_tokens": 300,
+      "code_map": {
+        "delivered_tokens": 736,
+        "saved_tokens": 0,
+        "saved_percent": -1.4533333333333334,
+        "elapsedMs": 1,
+        "eval": {
+          "tp": 2,
+          "fp": 1,
+          "fn": 1,
+          "precision": 0.6666666666666666,
+          "recall": 0.6666666666666666,
+          "f1": 0.6666666666666666
+        },
+        "impact": [
+          "tests/login.spec.ts",
+          "packages/api/src/routes/login.ts",
+          "packages/api/src/index.ts"
+        ],
+        "usedFallback": false
+      },
+      "baseline": {
+        "delivered_tokens": 495,
+        "saved_tokens": 0,
+        "saved_percent": -0.65,
+        "elapsedMs": 1,
+        "eval": {
+          "tp": 3,
+          "fp": 5,
+          "fn": 0,
+          "precision": 0.375,
+          "recall": 1,
+          "f1": 0.5454545454545454
+        },
+        "impact": [
+          "tests/login.spec.ts",
+          "packages/api/src/index.ts",
+          "packages/api/src/routes/login.ts",
+          "packages/worker/main.py",
+          "packages/worker/tasks/login.py",
+          "packages/api/src/handlers/index.ts",
+          "packages/api/src/registry.ts",
+          "packages/api/src/routes/index.ts"
+        ]
+      },
+      "head_to_head": {
+        "delivered_tokens_diff": 241,
+        "delivered_tokens_ratio": 1.486868686868687,
+        "cm_better_quality": true,
+        "cm_worse_quality": false
+      }
+    },
+    {
+      "id": "adv-impact-registry",
+      "repo": "adversarial-repo",
+      "kind": "impact",
+      "raw_tokens": 300,
+      "code_map": {
+        "delivered_tokens": 460,
+        "saved_tokens": 0,
+        "saved_percent": -0.5333333333333333,
+        "elapsedMs": 1,
+        "eval": {
+          "tp": 0,
+          "fp": 2,
+          "fn": 1,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "impact": [
+          "packages/api/src/index.ts",
+          "packages/api/src/routes/login.ts"
+        ],
+        "usedFallback": false
+      },
+      "baseline": {
+        "delivered_tokens": 72,
+        "saved_tokens": 228,
+        "saved_percent": 0.76,
+        "elapsedMs": 1,
+        "eval": {
+          "tp": 0,
+          "fp": 1,
+          "fn": 1,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "impact": [
+          "packages/api/src/index.ts"
+        ]
+      },
+      "head_to_head": {
+        "delivered_tokens_diff": 388,
+        "delivered_tokens_ratio": 6.388888888888889,
+        "cm_better_quality": false,
+        "cm_worse_quality": false
+      }
+    }
+  ]
+}

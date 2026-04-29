@@ -23,3 +23,11 @@ node_modules/
 
 # keep the directory around via a template
 !.code-map/template.json
+
+# harness output: keep only the canonical before/after snapshots
+scripts/harness/results/*.json
+!scripts/harness/results/before-final.json
+!scripts/harness/results/after-final.json
+!scripts/harness/results/ext-before.json
+!scripts/harness/results/ext-after-A1A6.json
+

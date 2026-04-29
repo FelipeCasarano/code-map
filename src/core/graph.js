@@ -115,6 +115,67 @@ class Graph {
       .filter((r) => r.node);
   }
 
+  // Precision-first impact: only follow edges where the target depends on the source.
+  // Direction-correct: from a file F we want files that import F (incoming "imports") and
+  // files that consume F (outgoing "called_by"). We DO NOT expand into F's own symbols or
+  // F's outgoing dependencies. Tests reach back through "tested_by".
+  // Returns ranked file-typed nodes only; symbol nodes deliberately filtered out.
+  impactPrecise(id, opts = {}) {
+    const { depth = 2, limit = 30, decay = 0.7, includeTests = true, includeAnchors = true } = opts;
+    if (!this.nodes.has(id)) return [];
+    const startNode = this.nodes.get(id);
+    const startFile = startNode.type === "file" ? startNode.key : startNode.file || null;
+    const scores = new Map();
+    const reasons = new Map();
+    // A5 direct-mode trims "affects" (anchor-derived noise) when includeAnchors=false.
+    const propagateRules = {
+      out: new Set(includeAnchors ? ["called_by", "affects", "tested_by"] : ["called_by", "tested_by"]),
+      in: new Set(["imports", "tested_by"]),
+    };
+    const queue = [{ id, score: 1, hops: 0, path: [] }];
+    const visited = new Set([id]);
+    while (queue.length) {
+      const cur = queue.shift();
+      if (cur.hops >= depth) continue;
+      const out = this.outEdges.get(cur.id) || [];
+      const inc = this.inEdges.get(cur.id) || [];
+      const expand = (edges, dir, otherKey) => {
+        for (const e of edges) {
+          if (!propagateRules[dir].has(e.type)) continue;
+          const other = e[otherKey];
+          // Skip propagating into nodes inside the start file (own symbols/routes).
+          const otherNode = this.nodes.get(other);
+          if (!otherNode) continue;
+          if (startFile && otherNode.file === startFile) continue;
+          if (!includeTests && otherNode.type === "test") continue;
+          const propagate = cur.score * decay * (e.weight || 1) * (e.confidence || 0.7);
+          const prior = scores.get(other) || 0;
+          if (propagate > prior) {
+            scores.set(other, propagate);
+            reasons.set(other, [...cur.path, `${dir === "out" ? "→" : "←"}${e.type}`]);
+          }
+          if (!visited.has(other)) {
+            visited.add(other);
+            queue.push({ id: other, score: propagate, hops: cur.hops + 1, path: [...cur.path, e.type] });
+          }
+        }
+      };
+      expand(out, "out", "to");
+      expand(inc, "in", "from");
+    }
+    scores.delete(id);
+    return Array.from(scores.entries())
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, limit)
+      .map(([nid, score]) => ({
+        id: nid,
+        score: Number(score.toFixed(4)),
+        path: reasons.get(nid),
+        node: this.nodes.get(nid),
+      }))
+      .filter((r) => r.node && r.node.type === "file");
+  }
+
   toJSON() {
     return {
       nodes: Array.from(this.nodes.values()),
